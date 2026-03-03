@@ -1,0 +1,804 @@
+/* ============================================
+   MushafPlus — Global Styles & CSS Variables
+   Authentic Quran Mushaf Design
+   ============================================ */
+
+/* ---------- Google Fonts ---------- */
+/* Fonts are loaded via index.html <link> tags for non-blocking rendering.
+   The @import below is kept as a fallback only. */
+/* @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Amiri+Quran&family=Scheherazade+New:wght@400;700&family=Cairo:wght@300;400;500;600;700&display=swap'); */
+
+/* ---------- Variables ---------- */
+:root {
+  /* Palette – Light (Clean, modern Islamic) */
+  --bg-primary: #F8F6F1;
+  --bg-secondary: #EFEBE3;
+  --bg-card: #FFFFFF;
+  --bg-overlay: rgba(0, 0, 0, .45);
+  --text-primary: #1A1A2E;
+  --text-secondary: #4A4A5A;
+  --text-muted: #8E8E9A;
+  --text-quran: #0F0F1A;
+  --accent: #C8A951;
+  --accent-light: rgba(200, 169, 81, .10);
+  --accent-dark: #A08930;
+  --border: rgba(0, 0, 0, .07);
+  --border-strong: rgba(0, 0, 0, .14);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, .06);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, .10);
+  --header-bg: linear-gradient(135deg, #1B5E3C 0%, #14462C 100%);
+  --sidebar-bg: #FFFFFF;
+  --player-bg: linear-gradient(135deg, #1B5E3C 0%, #14462C 100%);
+  --surah-header-bg: linear-gradient(135deg, #1B5E3C 0%, #14462C 100%);
+  --bismillah-color: var(--primary);
+  --ayah-hover: rgba(27, 94, 60, .03);
+  --highlight-bg: rgba(200, 169, 81, .12);
+  --scrollbar-thumb: rgba(0, 0, 0, .18);
+  --scrollbar-track: transparent;
+
+  /* UI Tokens */
+  --primary-on: #FFFFFF;
+  --primary-on-muted: rgba(255, 255, 255, 0.65);
+  --primary-on-alpha: rgba(255, 255, 255, 0.10);
+  --gold-alpha: rgba(200, 169, 81, 0.15);
+  --gold-strong: rgba(200, 169, 81, 0.35);
+  --gold-border: rgba(200, 169, 81, 0.15);
+  --gold-light: rgba(200, 169, 81, 0.08);
+
+  /* Mushaf colors */
+  --mushaf-bg: #FFFFFF;
+  --mushaf-border: rgba(0, 0, 0, .08);
+  --mushaf-frame-outer: transparent;
+  --mushaf-frame-inner: transparent;
+  --mushaf-pattern: transparent;
+  --mushaf-page-shadow: rgba(0, 0, 0, .06);
+
+  /* Tajwid colours — quran.com inspired */
+  --tajwid-ghunna: #1aaf5d;
+  --tajwid-idgham: #9b59b6;
+  --tajwid-ikhfa: #1abc9c;
+  --tajwid-iqlab: #2ecc71;
+  --tajwid-qalqala: #3498db;
+  --tajwid-madd: #e74c3c;
+  --tajwid-madd-normal: #d63384;
+  --tajwid-madd-separated: #fd7e14;
+  --tajwid-madd-connected: #e91e90;
+  --tajwid-madd-necessary: #dc3545;
+  --tajwid-lam-shamsiyya: #AAAAAA;
+  --tajwid-tafkhim: #4a86c8;
+  --tajwid-silent: #AAAAAA;
+  /* Warsh-specific tajweed colours */
+  --tajwid-naql: #ff6b35;
+  --tajwid-tashil: #7c4dff;
+  --tajwid-ibdal: #FF5722;
+  --tajwid-madd-badal: #e91e63;
+  --tajwid-sila-kubra: #0288d1;
+  --tajwid-tarqiq-ra: #00bcd4;
+  --tajwid-idgham-warsh: #6a1b9a;
+
+  /* Fonts */
+  --font-quran: 'Scheherazade New', 'Amiri Quran', 'Amiri', serif;
+  --font-quran-tajweed: 'KFGQPC Uthmanic Script HAFS', 'UthmanicHafs', 'Amiri Quran', 'Noto Naskh Arabic', 'Scheherazade New', 'Amiri', serif;
+  --font-ui: 'Cairo', sans-serif;
+  --font-size-quran: 28px;
+  --line-height-quran: 2.5;
+
+  /* Layout */
+  --header-h: 54px;
+  --player-h: 72px;
+  --sidebar-w: 340px;
+  --num-size: 34px;
+  --num-size-sm: 30px;
+
+  /* Misc */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius: var(--radius-md);
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+  --tr-fast: .15s ease;
+  --tr: .2s ease;
+  --tr-slow: .35s ease;
+
+  /* ─── Aliases (used by components) ─── */
+  --primary: #1B7A45;
+  --primary-dark: #125C33;
+  --primary-light: rgba(27, 122, 69, .06);
+  --primary-rgb: 27, 122, 69;
+  --gold: #C8A951;
+  --surface: var(--bg-card);
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+  --radius: var(--radius-sm);
+  --shadow: var(--shadow-sm);
+}
+
+/* ---------- Dark (AMOLED-friendly with warm accents) ---------- */
+[data-theme="dark"] {
+  --bg-primary: #0D0D14;
+  --bg-secondary: #16162A;
+  --bg-card: #1C1C34;
+  --bg-overlay: rgba(0, 0, 0, .65);
+  --text-primary: #E8E6F0;
+  --text-secondary: #A0A0BC;
+  --text-muted: #5C5C7A;
+  --text-quran: #F4F2FC;
+  --accent: #D4AF50;
+  --accent-light: rgba(212, 175, 80, .10);
+  --accent-dark: #B89A30;
+  --border: rgba(255, 255, 255, .07);
+  --border-strong: rgba(255, 255, 255, .14);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .30);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .35);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .45);
+  --header-bg: linear-gradient(135deg, #0F2018 0%, #0A1510 100%);
+  --sidebar-bg: #101020;
+  --player-bg: linear-gradient(135deg, #0F2018 0%, #0A1510 100%);
+  --surah-header-bg: linear-gradient(135deg, #142A1E 0%, #0C1E12 100%);
+  --bismillah-color: #D4AF50;
+  --ayah-hover: rgba(212, 175, 80, .04);
+  --highlight-bg: rgba(212, 175, 80, .12);
+  --scrollbar-thumb: rgba(255, 255, 255, .15);
+  --scrollbar-track: transparent;
+
+  /* UI Tokens (dark) */
+  --primary-on: #FFFFFF;
+  --primary-on-muted: rgba(255, 255, 255, 0.55);
+  --primary-on-alpha: rgba(255, 255, 255, 0.08);
+  --gold-alpha: rgba(212, 175, 80, 0.20);
+  --gold-strong: rgba(212, 175, 80, 0.40);
+  --gold-border: rgba(212, 175, 80, 0.15);
+
+  /* Mushaf dark */
+  --mushaf-bg: #1C1C34;
+  --mushaf-border: rgba(255, 255, 255, .08);
+  --mushaf-frame-outer: transparent;
+  --mushaf-frame-inner: transparent;
+  --mushaf-pattern: transparent;
+  --mushaf-page-shadow: rgba(0, 0, 0, .30);
+
+  /* ─── Aliases (dark) ─── */
+  --primary: #3CB371;
+  --primary-dark: #2A8C56;
+  --primary-light: rgba(60, 179, 113, .08);
+  --primary-rgb: 60, 179, 113;
+  --gold: #D4AF50;
+  --surface: var(--bg-card);
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+
+  /* Tajweed — brighter on dark bg */
+  --tajwid-ghunna: #22d472;
+  --tajwid-ikhfa: #22d472;
+  --tajwid-qalqala: #5dade2;
+  --tajwid-idgham: #bb8fce;
+  --tajwid-iqlab: #58d68d;
+  --tajwid-madd: #ff6b81;
+  --tajwid-madd-normal: #e85d9f;
+  --tajwid-madd-separated: #ffab4f;
+  --tajwid-madd-connected: #f55ab5;
+  --tajwid-madd-necessary: #ff6b81;
+  --tajwid-lam-shamsiyya: #CCCCCC;
+  --tajwid-tafkhim: #6fa3de;
+  --tajwid-silent: #CCCCCC;
+  /* Warsh-specific — brighter on dark bg */
+  --tajwid-naql: #ff8c5a;
+  --tajwid-tashil: #a78bfa;
+  --tajwid-ibdal: #ff7043;
+  --tajwid-madd-badal: #ff6b9d;
+  --tajwid-sila-kubra: #42a5f5;
+  --tajwid-tarqiq-ra: #4dd0e1;
+  --tajwid-idgham-warsh: #ce93d8;
+}
+
+[data-theme="light"] {
+  --tajwid-ghunna: #0d9b4e;
+  --tajwid-idgham: #7e3bb0;
+  --tajwid-ikhfa: #129d88;
+  --tajwid-iqlab: #1f9f50;
+  --tajwid-qalqala: #2f7fd2;
+  --tajwid-madd: #c62828;
+  --tajwid-madd-normal: #ad1457;
+  --tajwid-madd-separated: #d96a00;
+  --tajwid-madd-connected: #c2185b;
+}
+
+/* ---------- Sepia Theme ---------- */
+[data-theme="sepia"] {
+  --bg-primary: #F5E6C8;
+  --bg-secondary: #ECDBB2;
+  --bg-card: #FAF0D7;
+  --bg-overlay: rgba(0, 0, 0, .5);
+  --text-primary: #3E2723;
+  --text-secondary: #5D4037;
+  --text-muted: #8D6E63;
+  --text-quran: #2E1B0E;
+  --accent: #A1887F;
+  --accent-light: rgba(161, 136, 127, .15);
+  --accent-dark: #6D4C41;
+  --border: rgba(141, 110, 99, .25);
+  --border-strong: rgba(141, 110, 99, .45);
+  --shadow-sm: 0 1px 4px rgba(60, 30, 0, .08);
+  --shadow-md: 0 4px 16px rgba(60, 30, 0, .12);
+  --shadow-lg: 0 8px 32px rgba(60, 30, 0, .16);
+  --header-bg: linear-gradient(135deg, #5D4037, #3E2723);
+  --sidebar-bg: #F5E6C8;
+  --player-bg: linear-gradient(135deg, #5D4037, #3E2723);
+  --surah-header-bg: linear-gradient(135deg, #6D4C41, #4E342E);
+  --bismillah-color: #5D4037;
+  --ayah-hover: rgba(141, 110, 99, .1);
+  --highlight-bg: rgba(161, 136, 127, .2);
+  --scrollbar-thumb: #A1887F;
+  --scrollbar-track: #ECDBB2;
+  --mushaf-bg: #FAF0D7;
+  --mushaf-border: #A1887F;
+  --primary: #6D4C41;
+  --primary-dark: #4E342E;
+  --primary-light: rgba(109, 76, 65, .12);
+  --primary-rgb: 109, 76, 65;
+  --gold: #A1887F;
+  --surface: var(--bg-card);
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+}
+
+/* ---------- Ocean Theme ---------- */
+[data-theme="ocean"] {
+  --bg-primary: #E8F4F8;
+  --bg-secondary: #D0E8F0;
+  --bg-card: #F0F9FC;
+  --bg-overlay: rgba(0, 0, 0, .5);
+  --text-primary: #0D3B47;
+  --text-secondary: #1B5E6B;
+  --text-muted: #5D8A94;
+  --text-quran: #062A33;
+  --accent: #0288D1;
+  --accent-light: rgba(2, 136, 209, .12);
+  --accent-dark: #01579B;
+  --border: rgba(2, 136, 209, .2);
+  --border-strong: rgba(2, 136, 209, .4);
+  --shadow-sm: 0 1px 4px rgba(0, 40, 60, .08);
+  --shadow-md: 0 4px 16px rgba(0, 40, 60, .12);
+  --shadow-lg: 0 8px 32px rgba(0, 40, 60, .16);
+  --header-bg: linear-gradient(135deg, #01579B, #0277BD);
+  --sidebar-bg: #E8F4F8;
+  --player-bg: linear-gradient(135deg, #01579B, #0277BD);
+  --surah-header-bg: linear-gradient(135deg, #0277BD, #01579B);
+  --bismillah-color: #0288D1;
+  --ayah-hover: rgba(2, 136, 209, .08);
+  --highlight-bg: rgba(2, 136, 209, .15);
+  --scrollbar-thumb: #0288D1;
+  --scrollbar-track: #D0E8F0;
+  --mushaf-bg: #F0F9FC;
+  --mushaf-border: #0288D1;
+  --primary: #0277BD;
+  --primary-dark: #01579B;
+  --primary-light: rgba(2, 119, 189, .12);
+  --primary-rgb: 2, 119, 189;
+  --gold: #0288D1;
+  --surface: var(--bg-card);
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+}
+
+/* ---------- Forest Theme ---------- */
+[data-theme="forest"] {
+  --bg-primary: #E8F5E9;
+  --bg-secondary: #C8E6C9;
+  --bg-card: #F1F8F1;
+  --bg-overlay: rgba(0, 0, 0, .5);
+  --text-primary: #1B3A1F;
+  --text-secondary: #2E5A34;
+  --text-muted: #5A7D5E;
+  --text-quran: #0E2810;
+  --accent: #43A047;
+  --accent-light: rgba(67, 160, 71, .12);
+  --accent-dark: #2E7D32;
+  --border: rgba(67, 160, 71, .2);
+  --border-strong: rgba(67, 160, 71, .4);
+  --shadow-sm: 0 1px 4px rgba(0, 40, 0, .08);
+  --shadow-md: 0 4px 16px rgba(0, 40, 0, .12);
+  --shadow-lg: 0 8px 32px rgba(0, 40, 0, .16);
+  --header-bg: linear-gradient(135deg, #2E7D32, #1B5E20);
+  --sidebar-bg: #E8F5E9;
+  --player-bg: linear-gradient(135deg, #2E7D32, #1B5E20);
+  --surah-header-bg: linear-gradient(135deg, #2E7D32, #1B5E20);
+  --bismillah-color: #2E7D32;
+  --ayah-hover: rgba(67, 160, 71, .08);
+  --highlight-bg: rgba(67, 160, 71, .15);
+  --scrollbar-thumb: #43A047;
+  --scrollbar-track: #C8E6C9;
+  --mushaf-bg: #F1F8F1;
+  --mushaf-border: #43A047;
+  --primary: #2E7D32;
+  --primary-dark: #1B5E20;
+  --primary-light: rgba(46, 125, 50, .12);
+  --primary-rgb: 46, 125, 50;
+  --gold: #43A047;
+  --surface: var(--bg-card);
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+}
+
+/* ---------- Night Blue Theme ---------- */
+[data-theme="night-blue"] {
+  --bg-primary: #0A1628;
+  --bg-secondary: #112240;
+  --bg-card: #172A45;
+  --bg-overlay: rgba(0, 0, 0, .7);
+  --text-primary: #CCD6F6;
+  --text-secondary: #8892B0;
+  --text-muted: #495670;
+  --text-quran: #E6F1FF;
+  --accent: #64FFDA;
+  --accent-light: rgba(100, 255, 218, .1);
+  --accent-dark: #3AD6B5;
+  --border: rgba(100, 255, 218, .15);
+  --border-strong: rgba(100, 255, 218, .3);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, .2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .4);
+  --header-bg: linear-gradient(135deg, #112240, #0A1628);
+  --sidebar-bg: #0A1628;
+  --player-bg: linear-gradient(135deg, #112240, #0A1628);
+  --surah-header-bg: linear-gradient(135deg, #112240, #172A45);
+  --bismillah-color: #64FFDA;
+  --ayah-hover: rgba(100, 255, 218, .05);
+  --highlight-bg: rgba(100, 255, 218, .12);
+  --scrollbar-thumb: #64FFDA;
+  --scrollbar-track: #112240;
+  --mushaf-bg: #172A45;
+  --mushaf-border: #64FFDA;
+  --primary: #64FFDA;
+  --primary-dark: #3AD6B5;
+  --primary-light: rgba(100, 255, 218, .1);
+  --primary-rgb: 100, 255, 218;
+  --gold: #64FFDA;
+  --surface: var(--bg-card);
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+  --tajwid-ghunna: #22d472;
+  --tajwid-ikhfa: #22d472;
+  --tajwid-qalqala: #5dade2;
+  --tajwid-idgham: #bb8fce;
+  --tajwid-iqlab: #58d68d;
+  --tajwid-madd: #ff6b81;
+  --tajwid-lam-shamsiyya: #CCCCCC;
+  --tajwid-tafkhim: #6fa3de;
+  --tajwid-silent: #CCCCCC;
+  /* Warsh-specific — brighter on dark bg */
+  --tajwid-naql: #ff8c5a;
+  --tajwid-tashil: #a78bfa;
+  --tajwid-ibdal: #ff7043;
+  --tajwid-madd-badal: #ff6b9d;
+  --tajwid-sila-kubra: #42a5f5;
+  --tajwid-tarqiq-ra: #4dd0e1;
+  --tajwid-idgham-warsh: #ce93d8;
+  --tajwid-madd-normal: #e85d9f;
+  --tajwid-madd-separated: #ffab4f;
+  --tajwid-madd-connected: #f55ab5;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  direction: inherit;
+  overflow-x: hidden;
+  height: 100%;
+  margin: 0;
+  transition: background var(--tr), color var(--tr);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1;
+  line-height: 1.6;
+}
+
+::-webkit-scrollbar {
+  width: 6px
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent)
+}
+
+a {
+  text-decoration: none;
+  color: inherit
+}
+
+button {
+  font-family: var(--font-ui)
+}
+
+ul,
+ol {
+  list-style: none
+}
+
+/* ---------- Utility ---------- */
+.hidden {
+  display: none !important
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(100%)
+  }
+
+  to {
+    transform: translateX(0)
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1)
+  }
+
+  50% {
+    transform: scale(1.05)
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    opacity: .5;
+    transform: scale(1)
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2)
+  }
+}
+
+@keyframes loadBar {
+  0% {
+    width: 0
+  }
+
+  100% {
+    width: 100%
+  }
+}
+
+@keyframes splashIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+/* ---------- Scrollbar (Firefox) ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track)
+}
+
+/* ---------- Common Components ---------- */
+
+
+/* Selection */
+::selection {
+  background: var(--accent-light);
+  color: var(--accent)
+}
+
+/* ---------- Responsive ---------- */
+
+/* Tablet */
+@media (max-width: 1023px) {
+  :root {
+    --sidebar-w: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-h: 48px;
+    --sidebar-w: 300px;
+    --player-h: 64px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  :root {
+    --header-h: 46px;
+    --player-h: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --sidebar-w: 100vw;
+    --player-h: 56px;
+  }
+}
+
+/* ---------- Focus & Accessibility ---------- */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Smooth transitions on theme change ---------- */
+body {
+  transition: background var(--tr), color var(--tr);
+}
+
+/* ============================================
+   App Layout
+   ============================================ */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.app-container.rtl {
+  direction: rtl;
+}
+
+.app-container.ltr {
+  direction: ltr;
+}
+
+.main-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  margin-top: 0;
+  /* leave room for fixed audio player at bottom */
+  padding-bottom: var(--player-h);
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Helpers shared across components
+   ============================================ */
+#root {
+  height: 100%;
+}
+
+/* ============================================
+   Shared Modal Styles
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px) saturate(1.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  animation: fadeIn 0.2s ease;
+  overflow-y: auto;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .15), 0 4px 16px rgba(0, 0, 0, .06);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 560px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.25s ease;
+}
+
+/* Mobile modal */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: var(--radius);
+  }
+
+  .modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Tablet modal */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .modal-overlay {
+    padding: 1.5rem;
+  }
+
+  .modal {
+    max-width: 540px;
+    max-height: 85vh;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+.modal-title {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ============================================
+   Shared Icon Button
+   ============================================ */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.18s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary);
+}
+
+/* ============================================
+   Tooltip utility
+   ============================================ */
+[title] {
+  position: relative;
+}
+
+/* ============================================
+   Print styles (hide chrome)
+   ============================================ */
+@media print {
+
+  .app-header,
+  .sidebar,
+  .audio-player,
+  .notes-fab,
+  .modal-overlay,
+  .quran-nav {
+    display: none !important;
+  }
+
+  .main-layout {
+    padding-bottom: 0;
+  }
+
+  .ayah-block {
+    break-inside: avoid;
+  }
+}
