@@ -1,42 +1,43 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
-    port: 3001,
+    port: 3002,
     strictPort: true,
     host: true,
     hmr: {
-      host: 'localhost',
-      protocol: 'ws',
-      clientPort: 3001,
+      host: "localhost",
+      protocol: "ws",
+      clientPort: 3002,
     },
     open: true,
   },
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     sourcemap: false,
-    target: 'es2020',
+    target: "es2020",
     // Enable minification and tree-shaking
-    minify: 'esbuild',
+    minify: "esbuild",
     // CSS code splitting for parallel loading
     cssCodeSplit: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'services': [
-            './src/services/quranAPI.js',
-            './src/services/warshService.js',
-            './src/services/audioService.js',
-            './src/services/storageService.js',
+          "react-vendor": ["react", "react-dom"],
+          services: [
+            "./src/services/quranAPI.js",
+            "./src/services/warshService.js",
+            "./src/services/audioService.js",
+            "./src/services/storageService.js",
           ],
-          'data': [
-            './src/data/surahs.js',
-            './src/data/juz.js',
-            './src/data/reciters.js',
-            './src/data/tajwidRules.js',
+          data: [
+            "./src/data/surahs.js",
+            "./src/data/juz.js",
+            "./src/data/reciters.js",
+            "./src/data/tajwidRules.js",
           ],
         },
       },
