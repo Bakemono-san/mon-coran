@@ -1,20 +1,35 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
-import { getSettings, saveSettings } from '../services/storageService';
-import { LANGUAGES } from '../i18n';
-import { ensureReciterForRiwaya } from '../data/reciters';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
+import { getSettings, saveSettings } from "../services/storageService";
+import { LANGUAGES } from "../i18n";
+import { ensureReciterForRiwaya } from "../data/reciters";
 
 /* ── Initial State ──────────────────────────── */
 
 const stored = getSettings();
-const initialRiwaya = stored.riwaya || 'hafs';
-const initialReciter = ensureReciterForRiwaya(stored.reciter || 'ar.alafasy', initialRiwaya);
+const initialRiwaya = stored.riwaya || "hafs";
+const initialReciter = ensureReciterForRiwaya(
+  stored.reciter || "ar.alafasy",
+  initialRiwaya,
+);
 // Migration: si la langue stockée est 'ar' (supprimée), utiliser 'fr'
-const initialLang = (stored.lang === 'ar' || !stored.lang) ? 'fr' : stored.lang;
+const initialLang = stored.lang === "ar" || !stored.lang ? "fr" : stored.lang;
 
 const initialState = {
   // UI
   lang: initialLang,
-  theme: stored.theme || (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+  theme:
+    stored.theme ||
+    (typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light"),
   sidebarOpen: false,
   searchOpen: false,
   settingsOpen: false,
@@ -26,16 +41,16 @@ const initialState = {
 
   // Quran
   riwaya: initialRiwaya,
-  displayMode: stored.displayMode || 'surah', // 'surah' | 'page' | 'juz'
+  displayMode: stored.displayMode || "surah", // 'surah' | 'page' | 'juz'
   currentSurah: stored.lastPosition?.surah || 1,
   currentAyah: stored.lastPosition?.ayah || 1,
   currentPage: stored.lastPosition?.page || 1,
   currentJuz: stored.lastPosition?.juz || 1,
   fontSize: stored.fontSize || 28,
-  fontFamily: stored.fontFamily || 'scheherazade',
+  fontFamily: stored.fontFamily || "scheherazade",
   showTranslation: stored.showTranslation ?? true,
   showTajwid: stored.showTajwid ?? true,
-  translationLang: stored.translationLang || 'fr',
+  translationLang: stored.translationLang || "fr",
   continuousPlay: stored.continuousPlay ?? true, // auto-play next surah
 
   // Audio
@@ -54,49 +69,52 @@ const initialState = {
 
   // Auto night mode
   autoNightMode: stored.autoNightMode ?? false,
-  nightStart: stored.nightStart || '20:00',
-  nightEnd: stored.nightEnd || '06:00',
-  nightTheme: stored.nightTheme || 'dark',
-  dayTheme: stored.dayTheme || 'light',
+  nightStart: stored.nightStart || "20:00",
+  nightEnd: stored.nightEnd || "06:00",
+  nightTheme: stored.nightTheme || "dark",
+  dayTheme: stored.dayTheme || "light",
 
   // Wird goals
-  wirdGoalType: stored.wirdGoalType || 'pages',
+  wirdGoalType: stored.wirdGoalType || "pages",
   wirdGoalAmount: stored.wirdGoalAmount || 5,
 
   // Loading
   loading: true,
   error: null,
+
+  // Currently loaded ayah count (updated after each fetch, used by Header)
+  loadedAyahCount: 0,
 };
 
 /* ── Reducer ────────────────────────────────── */
 
 function appReducer(state, action) {
   switch (action.type) {
-    case 'SET': {
+    case "SET": {
       const next = { ...state, ...action.payload };
       // Warsh doesn't support page mode → force surah mode
-      if (next.riwaya === 'warsh' && next.displayMode === 'page') {
-        next.displayMode = 'surah';
+      if (next.riwaya === "warsh" && next.displayMode === "page") {
+        next.displayMode = "surah";
       }
       return next;
     }
 
-    case 'TOGGLE_SIDEBAR':
+    case "TOGGLE_SIDEBAR":
       return { ...state, sidebarOpen: !state.sidebarOpen };
-    case 'TOGGLE_SEARCH':
+    case "TOGGLE_SEARCH":
       return { ...state, searchOpen: !state.searchOpen };
-    case 'TOGGLE_SETTINGS':
+    case "TOGGLE_SETTINGS":
       return { ...state, settingsOpen: !state.settingsOpen };
-    case 'TOGGLE_BOOKMARKS':
+    case "TOGGLE_BOOKMARKS":
       return { ...state, bookmarksOpen: !state.bookmarksOpen };
-    case 'TOGGLE_WIRD':
+    case "TOGGLE_WIRD":
       return { ...state, wirdOpen: !state.wirdOpen };
-    case 'TOGGLE_HISTORY':
+    case "TOGGLE_HISTORY":
       return { ...state, historyOpen: !state.historyOpen };
-    case 'TOGGLE_PLAYLIST':
+    case "TOGGLE_PLAYLIST":
       return { ...state, playlistOpen: !state.playlistOpen };
 
-    case 'NAVIGATE_SURAH':
+    case "NAVIGATE_SURAH":
       return {
         ...state,
         currentSurah: action.payload.surah,
@@ -104,48 +122,48 @@ function appReducer(state, action) {
         sidebarOpen: false,
       };
 
-    case 'NAVIGATE_PAGE':
+    case "NAVIGATE_PAGE":
       return {
         ...state,
         currentPage: action.payload.page,
-        displayMode: 'page',
+        displayMode: "page",
         sidebarOpen: false,
       };
 
-    case 'NAVIGATE_JUZ':
+    case "NAVIGATE_JUZ":
       return {
         ...state,
         currentJuz: action.payload.juz,
-        displayMode: 'juz',
+        displayMode: "juz",
         sidebarOpen: false,
       };
 
-    case 'SET_THEME':
+    case "SET_THEME":
       return { ...state, theme: action.payload };
 
-    case 'SET_LANG':
+    case "SET_LANG":
       return { ...state, lang: action.payload };
 
-    case 'SET_RIWAYA':
+    case "SET_RIWAYA":
       // Warsh n'a pas de mode page → rediriger vers surah si nécessaire
-      if (action.payload === 'warsh' && state.displayMode === 'page') {
-        return { ...state, riwaya: action.payload, displayMode: 'surah' };
+      if (action.payload === "warsh" && state.displayMode === "page") {
+        return { ...state, riwaya: action.payload, displayMode: "surah" };
       }
       return { ...state, riwaya: action.payload };
 
-    case 'SET_RECITER':
+    case "SET_RECITER":
       return { ...state, reciter: action.payload };
 
-    case 'SET_FONT_SIZE':
+    case "SET_FONT_SIZE":
       return { ...state, fontSize: action.payload };
 
-    case 'SET_FONT_FAMILY':
+    case "SET_FONT_FAMILY":
       return { ...state, fontFamily: action.payload };
 
-    case 'SET_PLAYING': {
+    case "SET_PLAYING": {
       let ayah = action.payload.ayah ?? state.currentPlayingAyah;
       // Normalize: ensure currentPlayingAyah is always an object or null
-      if (typeof ayah === 'number') {
+      if (typeof ayah === "number") {
         ayah = { surah: null, ayah: ayah, globalNumber: ayah };
       }
       return {
@@ -155,13 +173,13 @@ function appReducer(state, action) {
       };
     }
 
-    case 'SET_LOADING':
+    case "SET_LOADING":
       return { ...state, loading: action.payload, error: null };
 
-    case 'SET_ERROR':
+    case "SET_ERROR":
       return { ...state, loading: false, error: action.payload };
 
-    case 'SPLASH_DONE':
+    case "SPLASH_DONE":
       return { ...state, splashDone: true };
 
     default:
@@ -216,18 +234,37 @@ export function AppProvider({ children }) {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
   }, [
-    state.lang, state.theme, state.riwaya, state.reciter,
-    state.fontSize, state.fontFamily, state.translationLang, state.showTranslation,
-    state.showTajwid, state.displayMode, state.audioSpeed,
-    state.currentSurah, state.currentAyah, state.currentPage,
-    state.currentJuz, state.continuousPlay, state.syncOffsetsMs, state.warshStrictMode,
-    state.autoNightMode, state.nightStart, state.nightEnd, state.nightTheme, state.dayTheme,
-    state.wirdGoalType, state.wirdGoalAmount, state.volume,
+    state.lang,
+    state.theme,
+    state.riwaya,
+    state.reciter,
+    state.fontSize,
+    state.fontFamily,
+    state.translationLang,
+    state.showTranslation,
+    state.showTajwid,
+    state.displayMode,
+    state.audioSpeed,
+    state.currentSurah,
+    state.currentAyah,
+    state.currentPage,
+    state.currentJuz,
+    state.continuousPlay,
+    state.syncOffsetsMs,
+    state.warshStrictMode,
+    state.autoNightMode,
+    state.nightStart,
+    state.nightEnd,
+    state.nightTheme,
+    state.dayTheme,
+    state.wirdGoalType,
+    state.wirdGoalAmount,
+    state.volume,
   ]);
 
   // Apply theme to <html>
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', state.theme);
+    document.documentElement.setAttribute("data-theme", state.theme);
   }, [state.theme]);
 
   // Auto night mode — check every 60s
@@ -235,9 +272,9 @@ export function AppProvider({ children }) {
     if (!state.autoNightMode) return;
     const checkNight = () => {
       const now = new Date();
-      const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      const start = state.nightStart || '20:00';
-      const end = state.nightEnd || '06:00';
+      const hhmm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const start = state.nightStart || "20:00";
+      const end = state.nightEnd || "06:00";
       // Is it night time?
       let isNight;
       if (start <= end) {
@@ -246,39 +283,52 @@ export function AppProvider({ children }) {
         // Crosses midnight: e.g. 20:00 → 06:00
         isNight = hhmm >= start || hhmm < end;
       }
-      const target = isNight ? (state.nightTheme || 'dark') : (state.dayTheme || 'light');
+      const target = isNight
+        ? state.nightTheme || "dark"
+        : state.dayTheme || "light";
       if (state.theme !== target) {
-        dispatch({ type: 'SET_THEME', payload: target });
+        dispatch({ type: "SET_THEME", payload: target });
       }
     };
     checkNight();
     const interval = setInterval(checkNight, 60000);
     return () => clearInterval(interval);
-  }, [state.autoNightMode, state.nightStart, state.nightEnd, state.nightTheme, state.dayTheme, state.theme, dispatch]);
+  }, [
+    state.autoNightMode,
+    state.nightStart,
+    state.nightEnd,
+    state.nightTheme,
+    state.dayTheme,
+    state.theme,
+    dispatch,
+  ]);
 
   // Listen for system dark-mode changes (auto-apply if user hasn't manually overridden)
   useEffect(() => {
-    const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
     if (!mq) return;
     const handler = (e) => {
       // Only auto-switch if no explicit saved preference
       const current = getSettings();
       if (!current.theme) {
-        dispatch({ type: 'SET_THEME', payload: e.matches ? 'dark' : 'light' });
+        dispatch({ type: "SET_THEME", payload: e.matches ? "dark" : "light" });
       }
     };
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   // Apply direction to <html>
   useEffect(() => {
-    const langObj = LANGUAGES.find(l => l.code === state.lang);
-    document.documentElement.dir = langObj?.dir || 'rtl';
+    const langObj = LANGUAGES.find((l) => l.code === state.lang);
+    document.documentElement.dir = langObj?.dir || "rtl";
     document.documentElement.lang = state.lang;
   }, [state.lang]);
 
-  const set = useCallback((payload) => dispatch({ type: 'SET', payload }), [dispatch]);
+  const set = useCallback(
+    (payload) => dispatch({ type: "SET", payload }),
+    [dispatch],
+  );
 
   return (
     <AppContext.Provider value={{ state, dispatch, set }}>
@@ -289,7 +339,7 @@ export function AppProvider({ children }) {
 
 export function useApp() {
   const ctx = useContext(AppContext);
-  if (!ctx) throw new Error('useApp must be used within AppProvider');
+  if (!ctx) throw new Error("useApp must be used within AppProvider");
   return ctx;
 }
 
