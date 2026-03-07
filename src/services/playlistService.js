@@ -8,7 +8,7 @@ import { getDB } from './dbService';
 const STORE = 'playlists';
 
 function generateId() {
-  return 'pl-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+  return 'pl-' + crypto.randomUUID();
 }
 
 /** Create a new playlist */

@@ -383,6 +383,7 @@ export default function NotesPanel() {
                 <article
                   key={note.id}
                   className={cn(
+                    "notes-card",
                     "rounded-xl border transition-all duration-200",
                     "bg-[var(--bg-card)]",
                     isEditing
@@ -393,6 +394,7 @@ export default function NotesPanel() {
                   {/* Card header */}
                   <div
                     className={cn(
+                      "notes-card-header",
                       "flex items-center justify-between px-2.5 pt-2 pb-1.5 border-b",
                       isEditing
                         ? "border-[var(--primary)]/20"
@@ -431,6 +433,7 @@ export default function NotesPanel() {
                         <button
                           onClick={() => startEdit(note)}
                           className={cn(
+                            "notes-card-icon-btn",
                             "w-6 h-6 flex items-center justify-center rounded-lg",
                             "text-[var(--text-muted)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/10",
                             "transition-all duration-150 cursor-pointer outline-none",
@@ -451,6 +454,7 @@ export default function NotesPanel() {
                           handleDelete(note.id, note.surah, note.ayah)
                         }
                         className={cn(
+                          "notes-card-icon-btn",
                           "w-6 h-6 flex items-center justify-center rounded-lg",
                           "transition-all duration-150 cursor-pointer outline-none",
                           isDeleting
@@ -486,7 +490,7 @@ export default function NotesPanel() {
                   {/* Card body */}
                   <div className="px-2.5 py-2">
                     {isEditing ? (
-                      <div className="flex flex-col gap-2">
+                      <div className="notes-card-edit flex flex-col gap-2">
                         <textarea
                           ref={editRef}
                           value={editText}
@@ -506,7 +510,7 @@ export default function NotesPanel() {
                               handleSave(note.surah, note.ayah);
                           }}
                         />
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="notes-card-edit-actions flex items-center justify-end gap-1.5">
                           <button
                             onClick={cancelEdit}
                             className={cn(
@@ -544,7 +548,7 @@ export default function NotesPanel() {
                       </div>
                     ) : (
                       <p
-                        className="text-[0.78rem] text-[var(--text-primary)] font-[var(--font-ui)] leading-relaxed whitespace-pre-wrap cursor-text"
+                        className="notes-card-body text-[0.78rem] text-[var(--text-primary)] font-[var(--font-ui)] leading-relaxed whitespace-pre-wrap cursor-text"
                         onDoubleClick={() => startEdit(note)}
                         title={
                           lang === "fr"
@@ -561,7 +565,7 @@ export default function NotesPanel() {
 
                   {/* Card footer */}
                   {!isEditing && (
-                    <div className="flex items-center justify-between px-2.5 pb-2">
+                    <div className="notes-card-footer flex items-center justify-between px-2.5 pb-2">
                       <span className="text-[0.58rem] text-[var(--text-muted)] font-[var(--font-ui)] flex items-center gap-1">
                         <i className="fas fa-clock text-[0.5rem]" />
                         {formatDate(note.updatedAt)}
@@ -627,6 +631,7 @@ export default function NotesPanel() {
         aria-label={t("notes.title", lang)}
         aria-expanded={open}
         className={cn(
+          "notes-fab",
           "fixed z-[250] flex items-center justify-center",
           "w-11 h-11 rounded-full cursor-pointer outline-none",
           "transition-all duration-200",
@@ -680,7 +685,10 @@ export default function NotesPanel() {
           {isMobile ? (
             /* ── MOBILE: bottom sheet ── */
             <aside
-              className="fixed z-[200] flex flex-col left-0 right-0 w-full rounded-t-2xl border-t border-[var(--border)] max-h-[78dvh]"
+              className={cn(
+                "notes-panel-sheet",
+                "fixed z-[200] flex flex-col left-0 right-0 w-full rounded-t-2xl border-t border-[var(--border)] max-h-[78dvh]",
+              )}
               style={{
                 bottom: "var(--player-h)",
                 background: "var(--bg-card)",
@@ -698,6 +706,7 @@ export default function NotesPanel() {
             <aside
               ref={panelRef}
               className={cn(
+                "notes-panel-desk",
                 "fixed z-[200] flex flex-col rounded-2xl overflow-hidden",
                 "select-none",
                 isDragging

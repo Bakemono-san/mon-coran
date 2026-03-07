@@ -57,6 +57,8 @@ const initialState = {
   showTransliteration: stored.showTransliteration ?? true,
   showWordTranslation: stored.showWordTranslation ?? true,
   translationLang: stored.translationLang || "fr",
+  wordTranslationLang:
+    stored.wordTranslationLang || stored.translationLang || "fr",
   continuousPlay: stored.continuousPlay ?? true, // auto-play next surah
   focusReading: stored.focusReading ?? false,
 
@@ -209,6 +211,7 @@ export function AppProvider({ children }) {
         fontSize: state.fontSize,
         fontFamily: state.fontFamily,
         translationLang: state.translationLang,
+        wordTranslationLang: state.wordTranslationLang,
         showTranslation: state.showTranslation,
         showTajwid: state.showTajwid,
         showWordByWord: state.showWordByWord,
@@ -250,6 +253,7 @@ export function AppProvider({ children }) {
     state.fontSize,
     state.fontFamily,
     state.translationLang,
+    state.wordTranslationLang,
     state.showTranslation,
     state.showTajwid,
     state.showWordByWord,

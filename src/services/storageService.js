@@ -56,6 +56,8 @@ const SETTINGS_KEY = 'mushaf-plus-settings';
 
 // Valeurs valides pour validation
 const VALID_LANGS = ['fr', 'en'];
+const VALID_TRANSLATION_LANGS = ['fr', 'en', 'es', 'de', 'tr', 'ur'];
+const VALID_WORD_TRANSLATION_LANGS = ['fr', 'en'];
 const VALID_THEMES = ['light', 'dark', 'sepia', 'ocean', 'forest', 'night-blue'];
 const VALID_RIWAYAS = ['hafs', 'warsh'];
 const VALID_DISPLAY_MODES = ['surah', 'page', 'juz'];
@@ -74,6 +76,7 @@ const DEFAULT_SETTINGS = {
   fontSize: 28,
   fontFamily: 'mushaf-1441h',
   translationLang: 'fr',
+  wordTranslationLang: 'fr',
   showTranslation: true,
   showTajwid: true,
   displayMode: 'surah',      // 'surah' | 'page' | 'juz'
@@ -129,7 +132,10 @@ function sanitizeSettings(settings) {
     reciter: typeof safeInput.reciter === 'string' ? safeInput.reciter.slice(0, 50) : 'ar.alafasy',
     fontSize: Math.max(16, Math.min(48, Number(safeInput.fontSize) || 28)),
     fontFamily: VALID_FONTS.includes(safeInput.fontFamily) ? safeInput.fontFamily : 'mushaf-1441h',
-    translationLang: VALID_LANGS.includes(safeInput.translationLang) ? safeInput.translationLang : 'fr',
+    translationLang: VALID_TRANSLATION_LANGS.includes(safeInput.translationLang) ? safeInput.translationLang : 'fr',
+    wordTranslationLang: VALID_WORD_TRANSLATION_LANGS.includes(safeInput.wordTranslationLang)
+      ? safeInput.wordTranslationLang
+      : (VALID_WORD_TRANSLATION_LANGS.includes(safeInput.translationLang) ? safeInput.translationLang : 'fr'),
     showTranslation: Boolean(safeInput.showTranslation),
     showTajwid: Boolean(safeInput.showTajwid),
     displayMode: VALID_DISPLAY_MODES.includes(safeInput.displayMode) ? safeInput.displayMode : 'surah',

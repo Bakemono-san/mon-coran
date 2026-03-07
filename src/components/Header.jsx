@@ -33,10 +33,14 @@ export default function Header() {
     currentPage,
     currentJuz,
     riwaya,
+    translationLang,
+    wordTranslationLang,
     loadedAyahCount,
     showHome,
     showDuas,
+    showTranslation,
     showWordByWord,
+    showWordTranslation,
   } = state;
 
   const [goToValue, setGoToValue] = useState("");
@@ -60,9 +64,9 @@ export default function Header() {
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+      document.documentElement.requestFullscreen().catch(() => { });
     } else {
-      document.exitFullscreen().catch(() => {});
+      document.exitFullscreen().catch(() => { });
     }
   };
 
@@ -155,8 +159,8 @@ export default function Header() {
   /* ── Display modes — all modes available for both Hafs and Warsh ── */
   const allDisplayModes = [
     { id: "surah", icon: "fa-align-justify", labelKey: "settings.surahMode" },
-    { id: "page",  icon: "fa-file-lines",   labelKey: "settings.pageMode"  },
-    { id: "juz",   icon: "fa-book-open",    labelKey: "settings.juzMode"   },
+    { id: "page", icon: "fa-file-lines", labelKey: "settings.pageMode" },
+    { id: "juz", icon: "fa-book-open", labelKey: "settings.juzMode" },
   ];
 
   const currentLocationLabel =
@@ -168,6 +172,47 @@ export default function Header() {
 
   const currentLocationTotal =
     displayMode === "page" ? "604" : displayMode === "juz" ? "30" : "114";
+
+  const displayModeMeta =
+    displayMode === "page"
+      ? { icon: "fa-file-lines", label: t("settings.pageMode", lang) }
+      : displayMode === "juz"
+        ? { icon: "fa-book-open", label: t("settings.juzMode", lang) }
+        : { icon: "fa-align-justify", label: t("settings.surahMode", lang) };
+
+  const languageMeta = {
+    fr: { label: lang === "ar" ? "الفرنسية" : lang === "fr" ? "Français" : "French", short: "FR" },
+    en: { label: lang === "ar" ? "الإنجليزية" : lang === "fr" ? "Anglais" : "English", short: "EN" },
+    es: { label: lang === "ar" ? "الإسبانية" : lang === "fr" ? "Espagnol" : "Spanish", short: "ES" },
+    de: { label: lang === "ar" ? "الألمانية" : lang === "fr" ? "Allemand" : "German", short: "DE" },
+    tr: { label: lang === "ar" ? "التركية" : lang === "fr" ? "Turc" : "Turkish", short: "TR" },
+    ur: { label: lang === "ar" ? "الأردية" : lang === "fr" ? "Ourdou" : "Urdu", short: "UR" },
+  };
+  const verseTranslationMeta = languageMeta[translationLang] || languageMeta.fr;
+  const wordTranslationMeta = languageMeta[wordTranslationLang] || languageMeta.fr;
+  const hasHeaderTranslation = showTranslation || (showWordByWord && showWordTranslation);
+  const headerTranslationTitle = showTranslation
+    ? showWordByWord && showWordTranslation && wordTranslationLang !== translationLang
+      ? (lang === "fr"
+          ? `Versets ${verseTranslationMeta.label} · Mot-à-mot ${wordTranslationMeta.label}`
+          : lang === "ar"
+            ? `الآيات ${verseTranslationMeta.label} · كلمة بكلمة ${wordTranslationMeta.label}`
+            : `Verses ${verseTranslationMeta.label} · Word by word ${wordTranslationMeta.label}`)
+      : (lang === "fr"
+          ? `Traduction ${verseTranslationMeta.label}`
+          : lang === "ar"
+            ? `الترجمة ${verseTranslationMeta.label}`
+            : `Translation ${verseTranslationMeta.label}`)
+    : (lang === "fr"
+        ? `Mot-à-mot ${wordTranslationMeta.label}`
+        : lang === "ar"
+          ? `كلمة بكلمة ${wordTranslationMeta.label}`
+          : `Word by word ${wordTranslationMeta.label}`);
+  const headerTranslationCompact = showTranslation
+    ? showWordByWord && showWordTranslation && wordTranslationLang !== translationLang
+      ? `${verseTranslationMeta.short} · W ${wordTranslationMeta.short}`
+      : verseTranslationMeta.short
+    : `W ${wordTranslationMeta.short}`;
 
   /* ── Nav helpers ── */
   const isRtl = lang === "ar";
@@ -257,11 +302,8 @@ export default function Header() {
       className={cn(
         "flex items-center shrink-0 z-[100] relative select-none",
         "h-[var(--header-h)]",
-        "border-b border-[var(--header-border)]",
+        "bg-[var(--bg-primary)] border-b border-[var(--border)]",
       )}
-      style={{
-        background: "var(--header-glass)",
-      }}
       role="banner"
     >
       {/* ═══════════════════════════════════════
@@ -272,12 +314,12 @@ export default function Header() {
         <button
           className={cn(
             "flex items-center justify-center",
-            "w-9 h-9 rounded-xl",
-            "text-white/60 hover:text-white hover:bg-white/[0.12]",
-            "active:scale-95 active:bg-white/[0.08]",
+            "w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl",
+            "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-secondary)]",
+            "active:scale-95 active:bg-[var(--bg-tertiary)]",
             "transition-all duration-150 cursor-pointer outline-none",
-            "focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
-            state.sidebarOpen && "bg-white/[0.1] text-white",
+            "focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40",
+            state.sidebarOpen && "bg-[var(--bg-tertiary)] text-[var(--primary)]",
           )}
           onClick={() => dispatch({ type: "TOGGLE_SIDEBAR" })}
           title={t("nav.surahList", lang)}
@@ -293,55 +335,15 @@ export default function Header() {
           />
         </button>
 
-        {/* Brand MushafPlus — cliquable pour aller à l'accueil */}
+        {/* Brand/Logo */}
         <button
-          className={cn(
-            "hidden sm:flex items-center gap-2 cursor-pointer",
-            "rounded-xl transition-all duration-200 px-1 py-0.5",
-            "outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
-            showHome
-              ? "bg-[var(--gold)]/[0.14]"
-              : "hover:bg-white/[0.08]",
-          )}
-          onClick={() => set({ showHome: !showHome, showDuas: false })}
-          title={
-            showHome
-              ? (lang === "fr" ? "Fermer l'accueil" : lang === "ar" ? "إغلاق الرئيسية" : "Close home")
-              : (lang === "fr" ? "Accueil" : lang === "ar" ? "الصفحة الرئيسية" : "Home")
-          }
-          aria-label={lang === "fr" ? "Accueil MushafPlus" : "MushafPlus Home"}
-          aria-pressed={showHome && !showDuas}
+          className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
+          onClick={() => set({ showHome: true, showDuas: false })}
         >
-          <div
-            className="flex items-center justify-center w-8 h-8 rounded-xl shrink-0"
-            style={{
-              background:
-                showHome
-                  ? "linear-gradient(135deg, rgba(212,168,32,0.38) 0%, rgba(184,134,11,0.24) 100%)"
-                  : "linear-gradient(135deg, rgba(212,168,32,0.28) 0%, rgba(184,134,11,0.14) 100%)",
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.1), 0 1px 4px rgba(0,0,0,0.2)",
-            }}
-          >
-            <i
-              className={cn(
-                "text-[0.85rem] transition-transform duration-200",
-                showHome ? "fas fa-house" : "fas fa-book-quran",
-              )}
-              style={{ color: "var(--gold)" }}
-              aria-hidden="true"
-            />
-          </div>
-          <div className="hidden sm:flex flex-col leading-none">
-            <span className="text-white font-bold text-[0.88rem] tracking-wide font-[var(--font-ui)]">
-              MushafPlus
-            </span>
-            <span className="text-white/35 text-[0.6rem] leading-none">
-              {showHome
-                ? (lang === "fr" ? "accueil" : lang === "ar" ? "الرئيسية" : "home")
-                : (lang === "fr" ? "accueil" : lang === "ar" ? "الرئيسية" : "home")}
-            </span>
-          </div>
+          <i className="fas fa-book-quran text-[var(--primary)] text-[0.95rem] sm:text-lg" />
+          <span className="font-bold text-[var(--text)] tracking-tight hidden md:block">
+            MushafPlus
+          </span>
         </button>
 
         {/* Separator */}
@@ -349,55 +351,37 @@ export default function Header() {
 
         <button
           className={cn(
-            "hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl",
-            "text-[0.72rem] font-semibold",
+            "hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg",
+            "text-[0.75rem] font-semibold",
             "transition-all duration-200 cursor-pointer outline-none",
             showDuas
-              ? "bg-[var(--gold)]/[0.18] text-white"
-              : "bg-white/[0.07] border border-white/[0.06] text-white/70 hover:text-white hover:bg-white/[0.12]",
+              ? "bg-[var(--primary)] text-white"
+              : "bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)]",
           )}
           onClick={() => set({ showDuas: true, showHome: false })}
           title={lang === "ar" ? "صفحة الأدعية" : lang === "fr" ? "Page Douas" : "Duas page"}
           aria-label={lang === "ar" ? "صفحة الأدعية" : lang === "fr" ? "Ouvrir la page Douas" : "Open Duas page"}
           aria-pressed={showDuas}
         >
-          <i className="fas fa-hands-praying text-[0.68rem]" aria-hidden="true" />
+          <i className="fas fa-hands-praying" aria-hidden="true" />
           <span>{lang === "ar" ? "أدعية" : lang === "fr" ? "Douas" : "Duas"}</span>
         </button>
 
         {/* Riwayat selector — desktop */}
         <div className="hidden lg:flex items-center">
-          <div className="flex items-center rounded-xl bg-white/[0.07] border border-white/[0.06] p-0.5 gap-0.5">
+          <div className="flex items-center rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)] p-1 gap-1">
             {["hafs", "warsh"].map((r) => (
               <button
                 key={r}
                 className={cn(
-                  "relative flex items-center gap-1.5 px-3 py-1.5 rounded-[10px]",
-                  "text-[0.73rem] font-semibold font-[var(--font-ui)]",
-                  "cursor-pointer outline-none transition-all duration-200",
+                  "px-3 py-1.5 rounded-md text-[0.75rem] font-semibold transition-all duration-200 cursor-pointer",
                   riwaya === r
-                    ? "bg-white/[0.18] text-white shadow-sm"
-                    : "text-white/45 hover:text-white/80 hover:bg-white/[0.07]",
+                    ? "bg-[var(--primary)] text-white shadow-sm"
+                    : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-tertiary)]",
                 )}
                 onClick={() => applyRiwaya(r)}
-                title={
-                  r === "hafs"
-                    ? t("settings.hafs", lang)
-                    : t("settings.warsh", lang)
-                }
-                aria-pressed={riwaya === r}
               >
-                {riwaya === r && (
-                  <span
-                    className="w-1.5 h-1.5 rounded-full inline-block shrink-0"
-                    style={{ background: "var(--gold)" }}
-                  />
-                )}
-                <span>
-                  {r === "hafs"
-                    ? t("settings.hafs", lang)
-                    : t("settings.warsh", lang)}
-                </span>
+                {r === "hafs" ? t("settings.hafs", lang) : t("settings.warsh", lang)}
               </button>
             ))}
           </div>
@@ -407,45 +391,38 @@ export default function Header() {
       {/* ═══════════════════════════════════════
           CENTER: Tabs + Nav arrows + Surah name
          ═══════════════════════════════════════ */}
-      <div className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-1.5 sm:px-2 min-w-0">
-        {/* ── Display mode tabs ── */}
-        <div className="hidden sm:flex items-center rounded-xl bg-white/[0.07] border border-white/[0.05] p-0.5 gap-0.5 shrink-0">
-          {allDisplayModes.map((mode) => {
-            const isActive = displayMode === mode.id;
-            return (
-              <button
-                key={mode.id}
-                className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px]",
-                  "text-[0.71rem] font-semibold font-[var(--font-ui)]",
-                  "cursor-pointer outline-none whitespace-nowrap",
-                  "transition-all duration-200",
-                  isActive
-                    ? "bg-white/[0.18] text-white shadow-sm"
-                    : "text-white/45 hover:text-white/80 hover:bg-white/[0.08]",
-                )}
-                onClick={() => set({ displayMode: mode.id })}
-                disabled={false}
-                title={t(mode.labelKey, lang)}
-                aria-pressed={isActive}
-              >
-                <i
-                  className={cn(
-                    `fas ${mode.icon} text-[0.58rem]`,
-                    isActive ? "opacity-100" : "opacity-60",
-                  )}
-                  aria-hidden="true"
-                />
-                <span className="hidden md:inline">
-                  {t(mode.labelKey, lang)}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Divider */}
-        <div className="hidden sm:block w-px h-4 bg-white/[0.12] shrink-0" />
+      <div className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-1 sm:px-2 min-w-0">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className={cn(
+                "hidden sm:flex items-center gap-2 rounded-xl px-3 h-9 shrink-0",
+                "bg-[var(--bg-secondary)] border border-[var(--border)]",
+                "text-[var(--text-secondary)] hover:text-[var(--text)] hover:bg-[var(--bg-tertiary)]",
+                "transition-all duration-150 cursor-pointer outline-none",
+              )}
+              title={lang === "fr" ? "Mode de navigation" : lang === "ar" ? "نمط التنقل" : "Navigation mode"}
+            >
+              <i className={`fas ${displayModeMeta.icon} text-[0.72rem] text-[var(--primary)]`} />
+              <span className="text-[0.76rem] font-semibold font-[var(--font-ui)]">{displayModeMeta.label}</span>
+              <i className="fas fa-chevron-down text-[0.6rem] opacity-60" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="center" sideOffset={8} className="min-w-[210px]">
+            <DropdownMenuLabel>
+              <i className="fas fa-compass text-[0.65rem]" style={{ color: "var(--primary)", opacity: 0.75 }} />
+              <span>{lang === "fr" ? "Mode de navigation" : lang === "ar" ? "نمط التنقل" : "Navigation mode"}</span>
+            </DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={displayMode} onValueChange={(value) => set({ displayMode: value })}>
+              {allDisplayModes.map((mode) => (
+                <DropdownMenuRadioItem key={mode.id} value={mode.id}>
+                  <i className={`fas ${mode.icon}`} aria-hidden="true" />
+                  <span>{t(mode.labelKey, lang)}</span>
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Prev arrow — hidden on mobile */}
         <button
@@ -453,12 +430,12 @@ export default function Header() {
           disabled={isRtl ? !canGoNext : !canGoPrev}
           className={cn(
             "hidden sm:flex items-center justify-center w-8 h-8 rounded-xl shrink-0",
-            "bg-white/[0.07] border border-white/[0.05] text-white/55",
+            "bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-muted)]",
             "transition-all duration-150 cursor-pointer outline-none",
-            "hover:bg-white/[0.14] hover:text-white hover:border-white/[0.1]",
+            "hover:bg-[var(--bg-tertiary)] hover:text-[var(--text)] hover:border-[var(--border-strong)]",
             "active:scale-90",
-            "disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white/[0.07] disabled:active:scale-100",
-            "focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
+            "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[var(--bg-secondary)] disabled:active:scale-100",
+            "focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40",
           )}
           aria-label={
             isRtl ? t("quran.nextSurah", lang) : t("quran.prevSurah", lang)
@@ -475,12 +452,11 @@ export default function Header() {
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "flex flex-col items-center justify-center min-w-0 px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl",
-                "bg-white/[0.07] border border-white/[0.05]",
-                "hover:bg-white/[0.12] hover:border-white/[0.1]",
+                "flex flex-col items-center justify-center min-w-0 px-2.5 sm:px-4 py-1.5 rounded-lg",
+                "bg-[var(--bg-secondary)] border border-[var(--border)]",
+                "hover:bg-[var(--bg-tertiary)]",
                 "cursor-pointer outline-none transition-all duration-150",
-                "focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
-                goToOpen && "bg-white/[0.14] border-white/[0.12]",
+                goToOpen && "border-[var(--primary)]",
               )}
               title={
                 lang === "fr"
@@ -492,15 +468,26 @@ export default function Header() {
             >
               {/* Surah / location name */}
               <span
-                className="text-[0.82rem] sm:text-[0.92rem] font-bold text-white leading-tight truncate max-w-[120px] sm:max-w-[200px]"
+                className="text-[0.78rem] sm:text-[0.92rem] font-bold text-[var(--text)] leading-tight truncate max-w-[96px] sm:max-w-[200px]"
                 style={{ fontFamily: "var(--font-ui)" }}
               >
                 {centerTitle}
               </span>
 
+              {hasHeaderTranslation && (
+                <span
+                  className="inline-flex items-center gap-1 mt-[4px] px-1.5 sm:px-2 py-[2px] rounded-full border text-[0.55rem] sm:text-[0.6rem] font-semibold text-[var(--text-secondary)] bg-[var(--bg-primary)]/85 border-[var(--border)] max-w-full"
+                  title={headerTranslationTitle}
+                  style={{ fontFamily: "var(--font-ui)" }}
+                >
+                  <i className="fas fa-language text-[0.52rem] text-[var(--primary)]" aria-hidden="true" />
+                  <span className="truncate">{headerTranslationCompact}</span>
+                </span>
+              )}
+
               {/* Subtitle — simplified on mobile */}
               <span
-                className="text-[0.58rem] sm:text-[0.62rem] text-white/40 font-medium leading-tight mt-[3px] flex items-center gap-1"
+                className="text-[0.55rem] sm:text-[0.62rem] text-[var(--text-muted)] font-medium leading-tight mt-[3px] flex items-center gap-1"
                 style={{ fontFamily: "var(--font-ui)" }}
               >
                 {displayMode === "surah" ? (
@@ -512,7 +499,7 @@ export default function Header() {
                     {centerArabicSub !== centerTitle && (
                       <>
                         <span className="hidden sm:inline opacity-30">·</span>
-                        <span className="hidden sm:inline">{centerArabicSub}</span>
+                        <span className="hidden sm:inline text-[var(--text-muted)]">{centerArabicSub}</span>
                       </>
                     )}
                     <span className="opacity-30">·</span>
@@ -523,7 +510,7 @@ export default function Header() {
                     <span className="opacity-70">
                       {lang === "fr" ? "Page" : lang === "ar" ? "صفحة" : "Pg"}
                     </span>
-                    <span className="font-semibold text-white/55">
+                    <span className="font-semibold text-[var(--text-secondary)]">
                       {lang === "ar" ? toAr(currentPage) : currentPage}
                     </span>
                     <span className="opacity-30">/</span>
@@ -539,7 +526,7 @@ export default function Header() {
                   <>
                     {centerArabicSub && (
                       <>
-                        <span className="font-semibold text-white/55" style={{ fontFamily: "var(--font-quran)", fontSize: "0.72rem" }}>{centerArabicSub}</span>
+                        <span className="font-semibold text-[var(--text-secondary)]" style={{ fontFamily: "var(--font-quran)", fontSize: "0.72rem" }}>{centerArabicSub}</span>
                         <span className="opacity-30">·</span>
                       </>
                     )}
@@ -597,12 +584,12 @@ export default function Header() {
           disabled={isRtl ? !canGoPrev : !canGoNext}
           className={cn(
             "hidden sm:flex items-center justify-center w-8 h-8 rounded-xl shrink-0",
-            "bg-white/[0.07] border border-white/[0.05] text-white/55",
+            "bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-muted)]",
             "transition-all duration-150 cursor-pointer outline-none",
-            "hover:bg-white/[0.14] hover:text-white hover:border-white/[0.1]",
+            "hover:bg-[var(--bg-tertiary)] hover:text-[var(--text)] hover:border-[var(--border-strong)]",
             "active:scale-90",
-            "disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white/[0.07] disabled:active:scale-100",
-            "focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
+            "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[var(--bg-secondary)] disabled:active:scale-100",
+            "focus-visible:ring-2 focus-visible:ring-[var(--primary)]/40",
           )}
           aria-label={
             isRtl ? t("quran.prevSurah", lang) : t("quran.nextSurah", lang)
@@ -618,7 +605,7 @@ export default function Header() {
       {/* ═══════════════════════════════════════
           RIGHT: Actions
          ═══════════════════════════════════════ */}
-      <div className="flex items-center gap-0.5 pe-2 sm:pe-4 shrink-0">
+      <div className="flex items-center gap-0 pe-1.5 sm:pe-4 shrink-0">
         {/* Word-by-word toggle — quick access */}
         <HeaderIconButton
           icon="fa-w"
@@ -650,11 +637,10 @@ export default function Header() {
               <button
                 className={cn(
                   "flex items-center justify-center",
-                  "w-9 h-9 rounded-xl",
-                  "text-white/70 hover:text-white hover:bg-white/[0.12]",
+                  "w-8 h-8 sm:w-9 sm:h-9 rounded-md sm:rounded-lg",
+                  "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-secondary)]",
                   "active:scale-95",
                   "transition-all duration-150 cursor-pointer outline-none",
-                  "focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
                 )}
                 title={
                   lang === "fr"
@@ -685,6 +671,12 @@ export default function Header() {
                 <i className="fas fa-bookmark" aria-hidden="true" />
                 <span>{t("nav.bookmarks", lang)}</span>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => set({ showDuas: true, showHome: false })}
+              >
+                <i className="fas fa-hands-praying" aria-hidden="true" />
+                <span>{lang === "ar" ? "أدعية" : lang === "fr" ? "Douas" : "Duas"}</span>
+              </DropdownMenuItem>
 
               <DropdownMenuSeparator />
 
@@ -714,11 +706,27 @@ export default function Header() {
                         : "bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-tertiary)]",
                     )}
                     onClick={() => set({ displayMode: mode.id })}
-                  disabled={false}
+                    disabled={false}
                   >
                     {t(mode.labelKey, lang)}
                   </button>
                 ))}
+              </div>
+              {/* Word-by-word toggle (mobile) */}
+              <div className="flex gap-1.5 px-3 pb-2.5">
+                <button
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-[0.75rem] font-semibold",
+                    "font-[var(--font-ui)] cursor-pointer border transition-all duration-150",
+                    showWordByWord
+                      ? "bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm"
+                      : "bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-tertiary)]",
+                  )}
+                  onClick={() => set({ showWordByWord: !showWordByWord })}
+                >
+                  <i className="fas fa-w text-[0.7rem]" />
+                  <span>{lang === "ar" ? "كلمة بكلمة" : lang === "fr" ? "Mot-à-mot" : "Word by word"}</span>
+                </button>
               </div>
 
               {/* Riwaya (mobile) */}
@@ -872,18 +880,17 @@ function HeaderIconButton({ icon, className, active = false, ...props }) {
     <button
       className={cn(
         "flex items-center justify-center",
-        "w-9 h-9 rounded-xl",
+        "w-8 h-8 sm:w-9 sm:h-9 rounded-md sm:rounded-lg",
         "transition-all duration-150 cursor-pointer outline-none",
         "active:scale-90",
-        "focus-visible:ring-2 focus-visible:ring-[var(--gold)]/40",
         active
-          ? "text-white bg-white/[0.14] shadow-inner"
-          : "text-white/60 hover:text-white hover:bg-white/[0.12]",
+          ? "text-white bg-[var(--primary)] shadow-sm"
+          : "text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-secondary)]",
         className,
       )}
       {...props}
     >
-      <i className={`fas ${icon} text-[0.82rem]`} aria-hidden="true" />
+      <i className={`fas ${icon} text-[0.78rem] sm:text-[0.85rem]`} aria-hidden="true" />
     </button>
   );
 }

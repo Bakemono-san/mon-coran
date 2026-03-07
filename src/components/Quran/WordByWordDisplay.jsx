@@ -19,7 +19,7 @@ const WordByWordDisplay = React.memo(function WordByWordDisplay({
   fontSize = 28,
 }) {
   const { state } = useApp();
-  const { translationLang } = state;
+  const { wordTranslationLang } = state;
   
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +35,7 @@ const WordByWordDisplay = React.memo(function WordByWordDisplay({
       setError(null);
       
       try {
-        const wbwData = await getWordByWord(surah, ayah, translationLang);
+        const wbwData = await getWordByWord(surah, ayah, wordTranslationLang);
         if (!cancelled) {
           setWords(wbwData);
           setLoading(false);
@@ -54,7 +54,7 @@ const WordByWordDisplay = React.memo(function WordByWordDisplay({
     }
     
     return () => { cancelled = true; };
-  }, [surah, ayah, translationLang]);
+  }, [surah, ayah, wordTranslationLang]);
   
   // Calculate current word index based on progress
   const currentWordIdx = useMemo(() => {

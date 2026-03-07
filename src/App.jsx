@@ -6,6 +6,8 @@ import QuranDisplay from "./components/QuranDisplay";
 import HomePage from "./components/HomePage";
 import { prefetchInitialData } from "./services/quranAPI";
 import audioService from "./services/audioService";
+import SURAHS from "./data/surahs";
+import { getReciter, ensureReciterForRiwaya } from "./data/reciters";
 
 // Lazy-load modals — they're only needed when opened
 const Sidebar = lazy(() => import("./components/Sidebar"));
@@ -57,6 +59,37 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.perf = lowPerfMode ? "low" : "normal";
   }, [lowPerfMode]);
+
+  /* ── Pre-load audio playlist when on the home page ──
+     QuranDisplay handles playlist loading when in reading mode.
+     When showHome is true it's not mounted, so we build a minimal
+     playlist here (surah number + ayah index, no text) so the
+     AudioPlayer play button works directly from the home page. */
+  useEffect(() => {
+    if (!showHome) return;
+    const { riwaya, reciter: reciterId, currentSurah: surahNum, warshStrictMode } = state;
+    const safeId = ensureReciterForRiwaya(reciterId, riwaya);
+    const rec = getReciter(safeId, riwaya);
+    if (!rec) return;
+    // Respect Warsh strict-mode: don't load non-warsh voices
+    if (
+      riwaya === "warsh" &&
+      warshStrictMode &&
+      !String(rec.cdn || "").toLowerCase().includes("warsh")
+    ) return;
+    const surahData = SURAHS[surahNum - 1];
+    if (!surahData) return;
+    // Compute global ayah start (1-indexed)
+    let globalStart = 0;
+    for (let i = 0; i < surahNum - 1; i++) globalStart += SURAHS[i].ayahs;
+    const items = Array.from({ length: surahData.ayahs }, (_, i) => ({
+      surah: surahNum,
+      ayah: i + 1,
+      number: globalStart + i + 1,
+    }));
+    audioService.loadPlaylist(items, rec.cdn, rec.cdnType || "islamic");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showHome, state.riwaya, state.reciter, state.currentSurah, state.warshStrictMode]);
 
   /* ── Keyboard shortcuts ── */
   const handleKeyboard = useCallback(
@@ -185,8 +218,8 @@ export default function App() {
     <div
       className={`app-root flex flex-col h-dvh w-full overflow-hidden ${focusReading ? "focus-reading" : ""}`}
       dir={lang === "ar" ? "rtl" : "ltr"}
-      style={{ backgroundColor: "var(--bg-primary)" }}
     >
+      {/* Removed legacy Sakina starfield */}
       {/* ── Header ── */}
       <Header />
 

@@ -4,83 +4,74 @@ import { useState, useEffect, useRef } from "react";
 import audioService from "../services/audioService";
 
 /**
- * Very simple, predictable karaoke model:
+ * Karaoke model — word-by-word highlighting synchronized with audio.
  *
- * - Progress = (currentTime + offsetSec) / duration
- * - Clamped between 0 and 1
- * - No complex dynamic lag, no basmala magic, no adaptive smoothing
- *
- * The goal is to:
- *   1. Be easy to reason about
- *   2. Make it trivial to tune per-reciter / per-ayah offsets from the UI/state
- *   3. Avoid jumps backwards
- *
- * Recommended usage from the caller:
- *   useKaraoke({
- *     isFirstAyah,
- *     wordCount,
- *     calibration: {
- *       offsetSec: -0.4,        // start a bit earlier (negative = earlier)
- *       smoothing: 0.35,        // 0 = raw, >0 = smoothed
- *       minLagSec: 0.0,         // small positive if you want text slightly behind
- *       maxLagSec: 0.3,         // cap how far behind it can be
- *     }
- *   });
+ * Key improvements:
+ * - RAF loop parks automatically when audio is paused (no ghost highlights)
+ * - Seeks snap instantly without waiting for the smoothing ramp
+ * - Progress resets cleanly on ayah change
+ * - isPlaying-aware: if audio stops, progress freezes
  */
 
 export function useKaraoke({ isFirstAyah, wordCount, calibration }) {
-  const [progress,  setProgress]  = useState(0);
+  const [progress, setProgress] = useState(0);
   const [seekCount, setSeekCount] = useState(0);
-  const rafRef      = useRef(null);
+  const rafRef = useRef(null);
   const smoothedRef = useRef(0);
-  const lastTimeRef = useRef(-1); // -1 = not yet initialised
+  const lastTimeRef = useRef(-1);
 
-  // offsetSec négatif = highlight légèrement en retard sur l'audio (sécurité)
-  // offsetSec positif = highlight en avance (trop tôt)
+  // offsetSec négatif = highlight légèrement APRÈS l'audio (sécurité)
+  // offsetSec positif = highlight légèrement EN AVANCE
   const offsetSec = calibration?.offsetSec ?? -0.10;
-  // smoothing élevé (0.6+) = très réactif / snappy ; bas = lent, fluide
-  const smoothing  = calibration?.smoothing  ?? 0.55;
+  // smoothing élevé (0.7+) = très réactif / snappy
+  const smoothing = calibration?.smoothing ?? 0.65;
 
   useEffect(() => {
     // Reset on every calibration / ayah change
     smoothedRef.current = 0;
     lastTimeRef.current = -1;
+    setProgress(0);
     let running = true;
 
     const tick = () => {
       if (!running) return;
 
-      const dur = audioService.duration  || 0;
-      const t   = audioService.currentTime || 0;
+      // ── Park the loop when audio is paused / stopped ──
+      if (!audioService.isPlaying) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      const dur = audioService.duration || 0;
+      const t = audioService.currentTime || 0;
 
       if (dur > 0) {
         const prevT = lastTimeRef.current;
 
-        // Détection de saut (seek ou retour arrière)
+        // Detect seek (backward jump or large forward skip)
         if (prevT >= 0) {
           const delta = t - prevT;
-          const bigJump      = Math.abs(delta) > 1.5;
+          const bigJump = Math.abs(delta) > 1.5;
           const backwardSeek = delta < -0.25;
 
           if (bigJump || backwardSeek) {
-            // Snap immédiat sans smoothing
+            // Snap immediately — bypass smoothing
             const snapped = Math.max(0, Math.min(1, (t + offsetSec) / dur));
             smoothedRef.current = snapped;
-            if (backwardSeek || bigJump) {
-              setSeekCount(c => c + 1);
-            }
+            setSeekCount(c => c + 1);
+            // Reset lastIdx in the consumer via seekCount
           }
         }
 
-        // Progression lissée — alpha élevé = très réactif
+        // Smoothed progress — alpha clamped to [0.80, 0.96] for snappy yet stable tracking.
+        // Higher clamp floor eliminates the steady-state lab of older [0.55, 0.92] range.
         const rawProgress = Math.max(0, Math.min(1, (t + offsetSec) / dur));
-        const prev  = smoothedRef.current;
-        // Alpha clamped : 0.45–0.95 pour rester toujours réactif
-        const alpha = Math.min(0.95, Math.max(0.45, smoothing));
-        let   next  = prev + (rawProgress - prev) * alpha;
+        const prev = smoothedRef.current;
+        const alpha = Math.min(0.96, Math.max(0.80, smoothing));
+        let next = prev + (rawProgress - prev) * alpha;
 
-        // Monotone : on n'autorise le retour arrière que si un seek a été détecté
-        if (next < prev - 0.005) next = prev;
+        // Monotone guard: no backward drift without an explicit seek
+        if (next < prev - 0.003) next = prev;
 
         smoothedRef.current = next;
         setProgress(next);
@@ -103,17 +94,13 @@ export function useKaraoke({ isFirstAyah, wordCount, calibration }) {
 }
 
 /**
- * Helper to build a simple calibration profile.
- * You can adjust these per-reciter / per-riwaya in one place.
+ * Helper to build a calibration profile for a given reciter/riwaya.
  */
 export function buildKaraokeCalibration({ reciterId, riwaya, isFirstAyah, wordCount }) {
-  let offsetSec    = riwaya === "warsh" ? -0.32 : -0.28;
-  let smoothing    = 0.12;
-  let lagWordsBase = 0;
-  let lagWordsLong = 0;
-  // First ayah sometimes has a longer intro (basmala) -> tiny extra lag
-  if (isFirstAyah) {
-    offsetSec -= 0.06;
-  }
-  return { offsetSec, smoothing, lagWordsBase, lagWordsLong };
+  // Positive offsets → anticipatory highlighting (word lights up just before it is spoken).
+  let offsetSec = riwaya === "warsh" ? 0.20 : 0.15;
+  let smoothing = 0.88;
+  // First ayah has a shorter basmala intro (already stripped) — standard offset is fine.
+  // For Fatiha-style openings keep the same lead; no extra bias needed.
+  return { offsetSec, smoothing, lagWordsBase: 0, lagWordsLong: 0 };
 }

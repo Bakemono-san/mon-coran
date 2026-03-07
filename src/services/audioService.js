@@ -20,7 +20,7 @@ class AudioService {
     this._loadTimeout = null;
     this._preloadAudio = null; // For preloading next track
     this._preloadPool = []; // [{ url, audio }]
-    this._maxPreloadPool = 2;
+    this._maxPreloadPool = 3;
     this._loadRequestId = 0; // Used to ignore stale retry attempts
 
     // Memorization mode
@@ -121,10 +121,10 @@ class AudioService {
       this.currentAyah = this.playlist[preservedIndex];
     }
 
-    // Preload first relevant track immediately
+    // Preload first relevant tracks immediately
     if (this.playlist.length > 0) {
       const preloadIndex = preservedIndex >= 0 ? preservedIndex : 0;
-      this._preloadAhead(preloadIndex, 2);
+      this._preloadAhead(preloadIndex, 3);
     }
   }
 
@@ -148,7 +148,12 @@ class AudioService {
 
   resume() {
     if (this.audio.src && this.audio.src !== window.location.href) {
-      this.audio.play().catch(() => {});
+      this.audio.play().catch((err) => {
+        if (err?.name !== 'NotAllowedError') {
+          this.isPlaying = false;
+          this.onError?.(err);
+        }
+      });
       this.isPlaying = true;
       this.onPlay?.(this.playlist[this.playlistIndex]);
     }
@@ -437,8 +442,8 @@ class AudioService {
       this.onAyahChange?.(item);
       for (const fn of this._ayahChangeListeners) fn(item);
 
-      // Preload next tracks
-      this._preloadAhead(index + 1, 2);
+      // Preload next tracks (3 ahead for smoother continuous playback)
+      this._preloadAhead(index + 1, 3);
     } catch (err) {
       console.error('Audio play error:', err);
       this.onNetworkState?.('error');

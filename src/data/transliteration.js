@@ -253,23 +253,72 @@ function convertWordToArabic(word) {
 }
 
 /**
- * Convert Arabic text to simplified Latin (for matching).
+ * Convert Arabic text to simplified Latin (phonetic).
  * Strips diacritics and produces a plain romanization.
+ *
+ * @param {string} text - Arabic text to transliterate
+ * @param {string} riwaya - 'hafs' or 'warsh'
  */
-export function arabicToLatin(text) {
+export function arabicToLatin(text, riwaya = 'hafs') {
   if (!text) return '';
+
+  let processedText = text;
+
+  // ─── Riwaya-Specific Phonetic Pre-processing ───
+  if (riwaya === 'warsh') {
+    // 1. Naql (Vowel Transfer) - Simplified regex for common cases like "al-ard" -> "al-ard" (vowel stays)
+    // but word combinations like "man amana" -> "man-amana" (but pronounced manamana)
+    // Most Warsh-specific Naql is already in the spelling of Warsh Mushafs.
+
+    // 2. Imala (Softening 'a' -> 'ey')
+    // Common in Warsh for words ending in Alif Maqsura (ى) preceded by certain letters
+    // and for specific words.
+    processedText = processedText.replace(/ى\b/g, 'EY'); // Mark for later conversion
+    processedText = processedText.replace(/ىٰ\b/g, 'EY');
+  }
+
   let result = '';
-  for (const ch of text) {
+  for (let i = 0; i < processedText.length; i++) {
+    const ch = processedText[i];
+
+    // Custom marker for Imala
+    if (ch === 'E' && processedText[i + 1] === 'Y') {
+      result += 'ey';
+      i++;
+      continue;
+    }
+
     if (AR_TO_LAT[ch] !== undefined) {
-      result += AR_TO_LAT[ch];
+      // Check for shadda (doubling the previous consonant)
+      if (ch === '\u0651' && i > 0) {
+        // Find previous meaningful char (skip other diacritics if any)
+        let prevIdx = i - 1;
+        while (prevIdx >= 0 && !AR_TO_LAT[processedText[prevIdx]] && !/[\u0600-\u06FF]/.test(processedText[prevIdx])) {
+          prevIdx--;
+        }
+        if (prevIdx >= 0) {
+          const prevLat = AR_TO_LAT[processedText[prevIdx]];
+          if (prevLat && prevLat.length === 1) {
+            result += prevLat;
+          }
+        }
+      } else {
+        result += AR_TO_LAT[ch];
+      }
     } else if (/[\u0600-\u06FF\u0750-\u077F]/.test(ch)) {
       // Unknown Arabic char — skip
     } else {
       result += ch;
     }
   }
-  // Normalize: collapse multiple spaces, trim
-  return result.replace(/\s+/g, ' ').trim().toLowerCase();
+
+  // Final cleanup and formatting
+  return result
+    .replace(/\s+/g, ' ')
+    .replace(/(.)\1+/g, '$1$1') // Max double letters
+    .replace(/aey/g, 'ey')       // Clean up Imala overlap
+    .trim()
+    .toLowerCase();
 }
 
 /**

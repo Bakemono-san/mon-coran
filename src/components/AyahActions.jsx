@@ -135,6 +135,92 @@ export default function AyahActions({ surah, ayah, ayahData }) {
     setShowShare(false);
   };
 
+  const shareAsImage = async () => {
+    if (!ayahData?.text) return;
+    const W = 1080, H = 1080;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Green gradient background
+    const grd = ctx.createLinearGradient(0, 0, 0, H);
+    grd.addColorStop(0, '#1a6b3c');
+    grd.addColorStop(1, '#0c3220');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
+
+    // Gold ornamental double border
+    ctx.strokeStyle = '#c9a227';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(30, 30, W - 60, H - 60);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(46, 46, W - 92, H - 92);
+
+    // Await fonts
+    await document.fonts.ready;
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.direction = 'rtl';
+    ctx.fillStyle = '#ffffff';
+
+    // Wrap Arabic text
+    const text = ayahData.text;
+    const fontSize = Math.max(36, Math.min(52, Math.floor(W / (text.length / 4))));
+    ctx.font = `${fontSize}px "Scheherazade New", "Amiri Quran", serif`;
+    const maxW = W - 180;
+    const lines = [];
+    const words2 = text.split(' ');
+    let line = '';
+    for (const word of words2) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxW && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+
+    const lh = fontSize * 1.9;
+    const totalTextH = lines.length * lh;
+    const startY = (H / 2) - (totalTextH / 2) + (lh / 2) - 60;
+    lines.forEach((ln, i) => ctx.fillText(ln, W / 2, startY + i * lh));
+
+    // Surah reference
+    const surahInfo = getSurah(surah);
+    const surahLabel = surahInfo ? (lang === 'fr' ? surahInfo.fr : surahInfo.en) : `Surah ${surah}`;
+    ctx.direction = 'ltr';
+    ctx.font = '32px "Cairo", "Noto Naskh Arabic", sans-serif';
+    ctx.fillStyle = '#c9a227';
+    ctx.fillText(`\u2014 ${surahLabel}  \uFD3F${surah}:${ayah}\uFD3E`, W / 2, H - 180);
+
+    // Watermark
+    ctx.font = '22px "Cairo", sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.28)';
+    ctx.fillText('MushafPlus', W / 2, H - 100);
+
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    if (!blob) return;
+    const file = new File([blob], `mushafplus_${surah}_${ayah}.png`, { type: 'image/png' });
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'MushafPlus', text: getShareText() }); }
+      catch { /* cancelled */ }
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mushafplus_${surah}_${ayah}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    setShowShare(false);
+  };
+
   return (
     <div className="ayah-actions" onClick={e => e.stopPropagation()}>
       <div className="ayah-actions-bar">
@@ -196,6 +282,10 @@ export default function AyahActions({ surah, ayah, ayahData }) {
             </button>
             <button className="share-btn copy-share" onClick={shareCopyText}>
               <i className="fas fa-copy"></i> {t('actions.shareCopy', lang)}
+            </button>
+            <button className="share-btn image-share" onClick={shareAsImage}>
+              <i className="fas fa-image"></i>
+              {lang === 'fr' ? 'Image verte' : lang === 'ar' ? 'صورة' : 'Image'}
             </button>
             {navigator.share && (
               <button className="share-btn native" onClick={shareNative}>
@@ -360,6 +450,7 @@ export default function AyahActions({ surah, ayah, ayahData }) {
         .share-btn.twitter:hover { background: #1DA1F2; color: white; border-color: #1DA1F2; }
         .share-btn.email:hover { background: #EA4335; color: white; border-color: #EA4335; }
         .share-btn.copy-share:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .share-btn.image-share:hover { background: #1b5e3b; color: white; border-color: #1b5e3b; }
         .share-btn.native:hover { background: var(--gold); color: white; border-color: var(--gold); }
         .share-btn i { font-size: 0.95rem; width: 18px; text-align: center; }
       `}</style>

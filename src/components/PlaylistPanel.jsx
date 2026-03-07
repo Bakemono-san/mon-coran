@@ -10,7 +10,7 @@ import audioService from '../services/audioService';
 import { getReciter } from '../data/reciters';
 
 export default function PlaylistPanel() {
-  const { state, dispatch } = useApp();
+  const { state, dispatch, set } = useApp();
   const { lang, reciter, riwaya } = state;
 
   const [playlists, setPlaylists] = useState([]);
@@ -98,52 +98,66 @@ export default function PlaylistPanel() {
 
   return (
     <div className="modal-overlay" onClick={close}>
-      <div className="modal modal-playlist" onClick={e => e.stopPropagation()}>
+      <div className="modal modal-panel--wide" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">
-            <i className="fas fa-list" style={{ marginInlineEnd: '0.4rem' }}></i>
-            {t('playlist.title', lang)}
-          </h2>
-          <button className="icon-btn" onClick={close}>
+          <div className="modal-title-stack">
+            <div className="modal-kicker">{lang === 'fr' ? 'Écoute' : lang === 'ar' ? 'الاستماع' : 'Listening'}</div>
+            <h2 className="modal-title">
+              <i className="fas fa-list"></i>
+              {t('playlist.title', lang)}
+            </h2>
+            <div className="modal-subtitle">
+              {lang === 'fr'
+                ? 'Organisez vos versets en listes fluides et relancez-les en un geste.'
+                : lang === 'ar'
+                  ? 'نظّم آياتك في قوائم سلسة وأعد تشغيلها بضغطة واحدة.'
+                  : 'Organize verses into fluid lists and replay them instantly.'}
+            </div>
+          </div>
+          <button className="modal-close" onClick={close}>
             <i className="fas fa-times"></i>
           </button>
         </div>
 
-        <div className="pl-body">
+        <div className="modal-body modal-body--flush">
           {loading ? (
             <div className="wird-loading"><i className="fas fa-spinner fa-spin"></i></div>
           ) : !selectedId ? (
-            /* Playlist list view */
-            <div className="pl-list-view">
-              {/* Create new */}
-              <div className="pl-create">
+            <div className="panel-scroll">
+              <div className="panel-toolbar panel-toolbar--compact">
                 <input
                   type="text"
                   value={newName}
                   onChange={e => setNewName(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleCreate()}
                   placeholder={t('playlist.namePlaceholder', lang)}
-                  className="pl-input"
+                  className="modal-inline-input"
                   maxLength={50}
                 />
-                <button className="btn btn-primary pl-create-btn" onClick={handleCreate}>
+                <button className="modal-action-btn" onClick={handleCreate}>
                   <i className="fas fa-plus"></i>
                 </button>
               </div>
 
               {playlists.length === 0 ? (
-                <p className="wird-empty">
-                  {t('playlist.empty', lang)} {lang === 'fr'
-                    ? 'Créez-en une pour organiser vos versets favoris !'
-                    : 'Create one to organize your favorite verses!'}
-                </p>
+                <div className="modal-empty">
+                  <i className="fas fa-music"></i>
+                  <div>
+                    {t('playlist.empty', lang)} {lang === 'fr'
+                      ? 'Créez-en une pour organiser vos versets favoris.'
+                      : 'Create one to organize your favorite verses.'}
+                  </div>
+                </div>
               ) : (
-                <div className="pl-items">
+                <div className="panel-stack-list">
                   {playlists.map(pl => (
-                    <div key={pl.id} className="pl-item">
-                      <button className="pl-item-main" onClick={() => setSelectedId(pl.id)}>
-                        <i className="fas fa-music pl-item-icon"></i>
-                        <div className="pl-item-info">
+                    <div key={pl.id} className="modal-item-card">
+                      <button className="modal-item-main" onClick={() => setSelectedId(pl.id)}>
+                        <div className="modal-item-shell">
+                          <span className="modal-item-icon">
+                            <i className="fas fa-music"></i>
+                          </span>
+                          <div>
                           {editing === pl.id ? (
                             <input
                               type="text"
@@ -151,31 +165,32 @@ export default function PlaylistPanel() {
                               onChange={e => setEditName(e.target.value)}
                               onKeyDown={e => { if (e.key === 'Enter') handleRename(pl.id); if (e.key === 'Escape') setEditing(null); }}
                               onClick={e => e.stopPropagation()}
-                              className="pl-edit-input"
+                              className="modal-inline-input"
                               autoFocus
                             />
                           ) : (
-                            <span className="pl-item-name">{pl.name}</span>
+                            <span className="modal-item-body modal-item-body--title">{pl.name}</span>
                           )}
-                          <span className="pl-item-count">
+                          <span className="modal-item-meta modal-item-meta--stack">
                             {pl.ayahs.length} {lang === 'fr' ? 'versets' : 'ayahs'}
                           </span>
+                          </div>
                         </div>
                       </button>
-                      <div className="pl-item-actions">
+                      <div className="modal-item-actions">
                         {pl.ayahs.length > 0 && (
-                          <button className="icon-btn pl-play-btn" onClick={() => handlePlay(pl)} title={lang === 'fr' ? 'Écouter' : 'Play'}>
+                          <button className="modal-action-btn" onClick={() => handlePlay(pl)} title={lang === 'fr' ? 'Écouter' : 'Play'}>
                             <i className="fas fa-play"></i>
                           </button>
                         )}
                         <button
-                          className="icon-btn"
+                          className="modal-action-btn"
                           onClick={() => { setEditing(pl.id); setEditName(pl.name); }}
                           title={lang === 'fr' ? 'Renommer' : 'Rename'}
                         >
                           <i className="fas fa-pen"></i>
                         </button>
-                        <button className="icon-btn" onClick={() => handleDelete(pl.id)} title={lang === 'fr' ? 'Supprimer' : 'Delete'}>
+                        <button className="modal-action-btn modal-delete-btn" onClick={() => handleDelete(pl.id)} title={lang === 'fr' ? 'Supprimer' : 'Delete'}>
                           <i className="fas fa-trash"></i>
                         </button>
                       </div>
@@ -186,42 +201,48 @@ export default function PlaylistPanel() {
             </div>
           ) : (
             /* Playlist detail view */
-            <div className="pl-detail-view">
-              <button className="pl-back" onClick={() => setSelectedId(null)}>
+            <div className="panel-scroll">
+              <button className="panel-back-link" onClick={() => setSelectedId(null)}>
                 <i className="fas fa-arrow-left"></i> {lang === 'fr' ? 'Retour' : 'Back'}
               </button>
-              <h3 className="pl-detail-title">{selected?.name}</h3>
+              <h3 className="panel-section-title">{selected?.name}</h3>
 
               {selected && selected.ayahs.length > 0 && (
-                <button className="pl-play-all" onClick={() => handlePlay(selected)}>
+                <button className="panel-hero-btn" onClick={() => handlePlay(selected)}>
                   <i className="fas fa-play"></i>
                   {lang === 'fr' ? 'Écouter tout en boucle' : 'Play all in loop'}
                 </button>
               )}
 
               {(!selected || selected.ayahs.length === 0) ? (
-                <p className="wird-empty">
-                  {lang === 'fr'
-                    ? 'Aucun verset dans cette playlist. Ajoutez des versets depuis le menu d\'actions d\'un verset.'
-                    : 'No verses in this playlist. Add verses from the ayah actions menu.'}
-                </p>
+                <div className="modal-empty">
+                  <i className="fas fa-wave-square"></i>
+                  <div>
+                    {lang === 'fr'
+                      ? 'Aucun verset dans cette playlist. Ajoutez des versets depuis le menu d\'actions d\'un verset.'
+                      : 'No verses in this playlist. Add verses from the ayah actions menu.'}
+                  </div>
+                </div>
               ) : (
-                <div className="pl-ayahs">
+                <div className="panel-stack-list">
                   {selected.ayahs.map((a, i) => {
                     const surah = getSurah(a.surah);
                     return (
-                      <div key={i} className="pl-ayah">
-                        <div className="pl-ayah-info">
-                          <span className="pl-ayah-ref">{surah?.ar || `S.${a.surah}`} : {a.ayah}</span>
-                          {a.text && <span className="pl-ayah-text" dir="rtl">{a.text.slice(0, 60)}…</span>}
-                        </div>
-                        <button
-                          className="icon-btn"
-                          onClick={() => handleRemoveAyah(selected.id, a.surah, a.ayah)}
-                          title={lang === 'fr' ? 'Retirer' : 'Remove'}
-                        >
-                          <i className="fas fa-times"></i>
+                      <div key={i} className="modal-item-card">
+                        <button className="modal-item-main" onClick={() => { set({ displayMode: 'surah', showHome: false, showDuas: false }); dispatch({ type: 'NAVIGATE_SURAH', payload: { surah: a.surah, ayah: a.ayah } }); close(); }}>
+                          <div className="modal-item-meta">{lang === 'fr' ? `Verset ${a.ayah}` : `Ayah ${a.ayah}`}</div>
+                          <div className="modal-item-ar">{surah?.ar || `S.${a.surah}`}</div>
+                          {a.text && <div className="modal-item-body" dir="rtl">{a.text.slice(0, 90)}…</div>}
                         </button>
+                        <div className="modal-item-side">
+                          <button
+                            className="modal-action-btn modal-delete-btn"
+                            onClick={() => handleRemoveAyah(selected.id, a.surah, a.ayah)}
+                            title={lang === 'fr' ? 'Retirer' : 'Remove'}
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -231,173 +252,6 @@ export default function PlaylistPanel() {
           )}
         </div>
       </div>
-
-      <style>{`
-        .modal-playlist { max-width: 520px; }
-        .pl-body {
-          padding: 1rem;
-          overflow-y: auto;
-          max-height: 60vh;
-        }
-        .pl-create {
-          display: flex;
-          gap: 0.4rem;
-          margin-bottom: 0.8rem;
-        }
-        .pl-input {
-          flex: 1;
-          padding: 0.5rem 0.8rem;
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          background: var(--bg);
-          color: var(--text);
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.85rem;
-          outline: none;
-        }
-        .pl-input:focus { border-color: var(--primary); }
-        .pl-create-btn {
-          padding: 0.5rem 0.8rem;
-          border-radius: var(--radius);
-          font-size: 0.85rem;
-        }
-        .pl-items {
-          display: flex;
-          flex-direction: column;
-          gap: 0.4rem;
-        }
-        .pl-item {
-          display: flex;
-          align-items: center;
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          transition: all 0.15s;
-          overflow: hidden;
-        }
-        .pl-item:hover {
-          border-color: var(--primary);
-          background: var(--primary-light);
-        }
-        .pl-item-main {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.55rem 0.6rem;
-          border: none;
-          background: none;
-          color: var(--text);
-          cursor: pointer;
-          text-align: start;
-        }
-        .pl-item-icon {
-          color: var(--primary);
-          font-size: 0.9rem;
-          flex-shrink: 0;
-        }
-        .pl-item-info {
-          display: flex;
-          flex-direction: column;
-        }
-        .pl-item-name {
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.85rem;
-          font-weight: 600;
-          color: var(--text);
-        }
-        .pl-item-count {
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.7rem;
-          color: var(--text-muted);
-        }
-        .pl-item-actions {
-          display: flex;
-          gap: 0.15rem;
-          padding-inline-end: 0.3rem;
-        }
-        .pl-edit-input {
-          padding: 0.2rem 0.4rem;
-          border: 1px solid var(--primary);
-          border-radius: 4px;
-          background: var(--bg);
-          color: var(--text);
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.82rem;
-          outline: none;
-          width: 120px;
-        }
-        .pl-play-btn i { color: var(--primary); }
-        .pl-back {
-          display: flex;
-          align-items: center;
-          gap: 0.3rem;
-          padding: 0.3rem 0.5rem;
-          border: none;
-          background: none;
-          color: var(--primary);
-          cursor: pointer;
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.8rem;
-          margin-bottom: 0.5rem;
-          transition: all 0.15s;
-        }
-        .pl-back:hover { opacity: 0.7; }
-        .pl-detail-title {
-          font-family: 'Cairo', sans-serif;
-          font-size: 1rem;
-          color: var(--text);
-          margin-bottom: 0.5rem;
-        }
-        .pl-play-all {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.4rem;
-          width: 100%;
-          padding: 0.55rem;
-          border: none;
-          border-radius: var(--radius);
-          background: var(--primary);
-          color: white;
-          cursor: pointer;
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.85rem;
-          margin-bottom: 0.7rem;
-          transition: all 0.2s;
-        }
-        .pl-play-all:hover { background: var(--primary-dark); transform: scale(1.02); }
-        .pl-ayahs {
-          display: flex;
-          flex-direction: column;
-          gap: 0.3rem;
-        }
-        .pl-ayah {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0.45rem 0.5rem;
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-        }
-        .pl-ayah-info {
-          display: flex;
-          flex-direction: column;
-        }
-        .pl-ayah-ref {
-          font-family: 'Amiri', serif;
-          font-size: 0.88rem;
-          color: var(--primary);
-        }
-        .pl-ayah-text {
-          font-family: 'Amiri', serif;
-          font-size: 0.8rem;
-          color: var(--text-muted);
-          max-width: 280px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      `}</style>
     </div>
   );
 }

@@ -47,18 +47,31 @@ export default function SearchModal() {
   };
 
   const close = () => dispatch({ type: 'TOGGLE_SEARCH' });
+  const searchModeLabel = phoneticMode
+    ? (lang === 'fr' ? 'Phonétique' : lang === 'ar' ? 'كتابة صوتية' : 'Phonetic')
+    : (lang === 'fr' ? 'Arabe' : lang === 'ar' ? 'عربي' : 'Arabic');
 
   return (
     <div className="modal-overlay" onClick={close}>
-      <div className="modal modal-search" onClick={e => e.stopPropagation()}>
+      <div className="modal modal-panel--wide modal-search-panel" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">{t('search.title', lang)}</h2>
-          <button className="icon-btn" onClick={close}>
+          <div className="modal-title-stack">
+            <div className="modal-kicker">{lang === 'fr' ? 'Exploration' : lang === 'ar' ? 'استكشاف' : 'Explore'}</div>
+            <h2 className="modal-title">{t('search.title', lang)}</h2>
+            <div className="modal-subtitle">
+              {lang === 'fr'
+                ? 'Recherche par texte arabe ou saisie phonétique.'
+                : lang === 'ar'
+                  ? 'ابحث بالنص العربي أو بالكتابة الصوتية.'
+                  : 'Search by Arabic text or phonetic typing.'}
+            </div>
+          </div>
+          <button className="modal-close" onClick={close}>
             <i className="fas fa-times"></i>
           </button>
         </div>
 
-        <div className="search-bar">
+        <div className="modal-toolbar">
           <input
             type="text"
             value={query}
@@ -67,142 +80,100 @@ export default function SearchModal() {
             placeholder={phoneticMode
               ? (lang === 'fr' ? 'Ex: bismillah, rahman, fatiha…' : 'Ex: bismillah, rahman, fatiha…')
               : t('search.placeholder', lang)}
-            className="search-input"
+            className="modal-search-input"
             autoFocus
           />
-          <button className="btn btn-primary" onClick={handleSearch} disabled={loading}>
+          <button className="modal-action-btn" onClick={handleSearch} disabled={loading}>
             {loading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-search"></i>}
           </button>
         </div>
 
-        {/* Phonetic mode toggle */}
-        <div className="search-mode-toggle">
+        <div className="modal-segmented" role="tablist" aria-label={lang === 'fr' ? 'Mode de recherche' : lang === 'ar' ? 'وضع البحث' : 'Search mode'}>
           <button
-            className={`search-mode-btn ${!phoneticMode ? 'active' : ''}`}
+            className={`modal-segmented-btn ${!phoneticMode ? 'active' : ''}`}
             onClick={() => setPhoneticMode(false)}
           >
-            <i className="fas fa-font"></i> {lang === 'fr' ? 'Arabe' : 'Arabic'}
+            <i className="fas fa-font"></i> {lang === 'fr' ? 'Arabe' : lang === 'ar' ? 'عربي' : 'Arabic'}
           </button>
           <button
-            className={`search-mode-btn ${phoneticMode ? 'active' : ''}`}
+            className={`modal-segmented-btn ${phoneticMode ? 'active' : ''}`}
             onClick={() => setPhoneticMode(true)}
           >
-            <i className="fas fa-keyboard"></i> {lang === 'fr' ? 'Phonétique' : 'Phonetic'}
+            <i className="fas fa-keyboard"></i> {lang === 'fr' ? 'Phonétique' : lang === 'ar' ? 'صوتي' : 'Phonetic'}
           </button>
         </div>
 
-        {error && <p className="search-error">{error}</p>}
+        <div className="search-summary-bar">
+          <span className="search-summary-pill">
+            <i className="fas fa-wave-square"></i>
+            {searchModeLabel}
+          </span>
+          <span className="search-summary-pill">
+            <i className="fas fa-layer-group"></i>
+            {query
+              ? (lang === 'fr'
+                ? `${results.length} résultat${results.length > 1 ? 's' : ''}`
+                : lang === 'ar'
+                  ? `${results.length} نتيجة`
+                  : `${results.length} result${results.length > 1 ? 's' : ''}`)
+              : (lang === 'fr' ? 'Recherche contextuelle' : lang === 'ar' ? 'بحث سياقي' : 'Context search')}
+          </span>
+        </div>
 
-        <div className="search-results">
+        {error && <p className="modal-error">{error}</p>}
+
+        <div className="modal-results modal-search-results">
+          {!query && !loading && (
+            <div className="search-spotlight">
+              <div className="search-spotlight-icon">
+                <i className="fas fa-compass"></i>
+              </div>
+              <div className="search-spotlight-body">
+                <h3>
+                  {lang === 'fr' ? 'Rechercher dans le texte coranique' : lang === 'ar' ? 'ابحث داخل النص القرآني' : 'Search inside the Quran text'}
+                </h3>
+                <p>
+                  {lang === 'fr'
+                    ? 'Saisissez un mot arabe ou activez le mode phonétique pour retrouver rapidement un verset.'
+                    : lang === 'ar'
+                      ? 'اكتب كلمة عربية أو فعّل البحث الصوتي للوصول بسرعة إلى الآية.'
+                      : 'Type an Arabic word or enable phonetic mode to reach a verse quickly.'}
+                </p>
+              </div>
+            </div>
+          )}
+
           {results.length === 0 && !loading && query && (
-            <p className="search-empty">{t('search.noResults', lang)}</p>
+            <div className="modal-empty">
+              <i className="fas fa-search"></i>
+              <div>{t('search.noResults', lang)}</div>
+            </div>
           )}
           {results.map((r, i) => {
             const s = getSurah(r.surah.number);
+            const surahName = lang === 'ar' ? s?.ar : lang === 'fr' ? (s?.fr || s?.en) : s?.en;
             return (
-              <button key={i} className="search-result" onClick={() => goToAyah(r.surah.number, r.numberInSurah)}>
-                <div className="search-result-ref">
-                  {s?.ar} {lang === 'ar' ? toAr(r.numberInSurah) : r.numberInSurah}
+              <button key={i} className="modal-item-card search-result-card" onClick={() => goToAyah(r.surah.number, r.numberInSurah)}>
+                <div className="modal-item-main">
+                  <div className="search-result-head">
+                    <div className="modal-item-meta">
+                      {s?.ar} · {lang === 'ar' ? toAr(r.numberInSurah) : r.numberInSurah}
+                    </div>
+                    <div className="search-result-surah">{surahName}</div>
+                  </div>
+                  <div className="modal-item-ar" dir="rtl">{r.text}</div>
+                  <div className="search-result-action">
+                    <i className="fas fa-arrow-up-right-from-square"></i>
+                    <span>
+                      {lang === 'fr' ? 'Ouvrir dans la lecture' : lang === 'ar' ? 'فتح في القراءة' : 'Open in reading'}
+                    </span>
+                  </div>
                 </div>
-                <div className="search-result-text" dir="rtl">{r.text}</div>
               </button>
             );
           })}
         </div>
       </div>
-
-      <style>{`
-        .modal-search { max-width: 680px; }
-        .modal-search .search-bar {
-          display: flex;
-          gap: 0.5rem;
-          padding: 0.9rem 1.2rem;
-          border-bottom: 1px solid var(--border);
-          background: var(--surface);
-          position: sticky;
-          top: 0;
-          z-index: 1;
-        }
-        .search-input {
-          flex: 1;
-          padding: 0.6rem 1rem;
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          background: var(--bg);
-          color: var(--text);
-          font-family: 'Amiri', serif;
-          font-size: 1rem;
-          outline: none;
-        }
-        .search-input:focus { border-color: var(--primary); }
-        .search-results {
-          flex: 1;
-          overflow-y: auto;
-          padding: 0.65rem;
-        }
-        .search-result {
-          display: block;
-          width: 100%;
-          padding: 0.74rem 0.76rem;
-          margin-bottom: 0.4rem;
-          border: 1px solid var(--border);
-          background: var(--bg);
-          text-align: start;
-          cursor: pointer;
-          border-radius: var(--radius);
-          transition: all 0.15s;
-        }
-        .search-result:hover {
-          background: var(--primary-light);
-          border-color: var(--primary);
-        }
-        .search-result-ref {
-          font-family: 'Amiri', serif;
-          font-size: 0.85rem;
-          color: var(--primary);
-          margin-bottom: 0.15rem;
-        }
-        .search-result-text {
-          font-family: 'Amiri', serif;
-          font-size: 1rem;
-          color: var(--text);
-          line-height: 1.8;
-        }
-        .search-empty, .search-error {
-          text-align: center;
-          color: var(--text-muted);
-          padding: 2rem;
-          font-family: 'Cairo', sans-serif;
-        }
-        .search-error { color: var(--gold); }
-        .search-mode-toggle {
-          display: flex;
-          padding: 0 1.2rem 0.5rem;
-          gap: 0.3rem;
-        }
-        .search-mode-btn {
-          flex: 1;
-          padding: 0.35rem 0.5rem;
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          background: var(--bg);
-          color: var(--text-muted);
-          cursor: pointer;
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.75rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.3rem;
-          transition: all 0.2s;
-        }
-        .search-mode-btn:hover { background: var(--primary-light); color: var(--text); }
-        .search-mode-btn.active {
-          background: var(--primary);
-          color: white;
-          border-color: var(--primary);
-        }
-      `}</style>
     </div>
   );
 }

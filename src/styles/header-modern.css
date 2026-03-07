@@ -1,0 +1,208 @@
+/* ═══════════════════════════════════════════════════════════
+   HEADER MODERN DESIGN — Enhanced UI/UX
+   ═══════════════════════════════════════════════════════════ */
+
+.app-header {
+    background: var(--header-glass);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    animation: slideDownFade 0.4s var(--ease-out-cubic);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Header content grid */
+.header-content {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+}
+
+/* Navigation buttons with modern ripple effect */
+.header-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all var(--t-fast);
+    position: relative;
+    overflow: hidden;
+    color: var(--text-primary);
+}
+
+.header-nav-btn:hover {
+    background: rgba(27, 94, 59, 0.08);
+}
+
+.header-nav-btn:active {
+    transform: scale(0.96);
+}
+
+/* Ripple effect */
+.header-nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(27, 94, 59, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width var(--t-mid), height var(--t-mid);
+    pointer-events: none;
+}
+
+.header-nav-btn:hover::before {
+    width: 40px;
+    height: 40px;
+}
+
+/* Go-to selector with modern styling */
+.header-go-to {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-light);
+    border-radius: var(--r-md);
+    font-size: var(--text-sm);
+    transition: all var(--t-fast);
+    cursor: pointer;
+}
+
+.header-go-to:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-go-to-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: var(--space-2) 0;
+    font-size: inherit;
+    color: var(--text-primary);
+    width: 100%;
+}
+
+.header-go-to-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Theme cycle button with gradient indicator */
+.header-theme-btn {
+    position: relative;
+}
+
+.header-theme-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--emerald) 0%, var(--gold) 100%);
+    transform: translateX(-50%);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Badge indicator */
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 var(--space-1);
+    border-radius: var(--r-pill);
+    background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 100%);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    box-shadow: var(--shadow-emerald);
+    animation: slideUpAudio 0.2s var(--ease-out-cubic);
+}
+
+/* Surah/Page info with modern typography */
+.header-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    text-align: center;
+    padding: 0 var(--space-2);
+}
+
+.header-surah-name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.header-surah-meta {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .header-content {
+        grid-template-columns: auto 1fr;
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-3);
+    }
+
+    .header-info {
+        text-align: left;
+        padding-left: var(--space-2);
+    }
+
+    .header-go-to {
+        display: none;
+    }
+}
+
+/* Dark mode specific */
+[data-theme="dark"] .header-go-to {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .header-go-to:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes slideDownFade {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

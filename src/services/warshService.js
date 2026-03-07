@@ -280,7 +280,7 @@ export async function getWarshSurahFormatted(surahNum) {
 
   // Start loading fonts in background (don't block data return!)
   // WarshWordText handles loading state per-word with shimmer placeholders.
-  loadFontsForVerses(verses).catch(() => {});
+  loadFontsForVerses(verses).catch(() => { });
 
   // Calculate global ayah number offset
   const data = await loadWarshData();
@@ -301,13 +301,24 @@ export async function getWarshSurahFormatted(surahNum) {
     juz: null,                               // Could compute if needed
   }));
 
+  // Handle Bismillah injection for Surahs (except 1 and 9)
+  // For Warsh, the Bismillah is typically not counted as the first ayah of Fatiha.
+  const bismillah = (surahNum !== 9 && surahNum !== 1)
+    ? {
+      text: "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      numberInSurah: 0,
+      riwaya: 'warsh'
+    }
+    : null;
+
   return {
     ayahs,
+    bismillah,
     edition: { identifier: 'warsh-qcf4', name: 'Warsh (QCF4 Mushaf)' },
     requestedRiwaya: 'warsh',
     usedEdition: 'warsh-qcf4',
-    isTextFallback: false,                   // This IS authentic Warsh text!
-    isQCF4: true,                            // Flag for rendering
+    isTextFallback: false,
+    isQCF4: true,
   };
 }
 
@@ -375,7 +386,7 @@ export async function getWarshJuzVerses(juzNum) {
 
   // Start loading fonts in background (don't block data return!)
   const allWords = ayahs.map(a => a.warshWords);
-  loadFontsForVerses(allWords).catch(() => {});
+  loadFontsForVerses(allWords).catch(() => { });
 
   return {
     ayahs,

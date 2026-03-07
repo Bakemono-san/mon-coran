@@ -181,6 +181,7 @@ export default function AudioPlayer() {
     memPause,
     warshStrictMode,
     volume: savedVolume,
+    showHome,
   } = state;
 
   const [progress, setProgress] = useState(0);
@@ -218,8 +219,12 @@ export default function AudioPlayer() {
       });
     };
     audioService.onPause = () => set({ isPlaying: false });
-    audioService.onEnd = () =>
+    audioService.onEnd = () => {
       set({ isPlaying: false, currentPlayingAyah: null });
+      setCurTime(0);
+      setDuration(0);
+      setProgress(0);
+    };
     audioService.onAyahChange = (item) => {
       set({
         currentPlayingAyah: {
@@ -302,7 +307,9 @@ export default function AudioPlayer() {
   }, [audioSpeed]);
 
   useEffect(() => {
-    audioService.setVolume(savedVolume ?? 1);
+    const v = savedVolume ?? 1;
+    setVolume(v);
+    audioService.setVolume(v);
   }, [savedVolume]);
 
   useEffect(() => {
@@ -369,6 +376,13 @@ export default function AudioPlayer() {
     : lang === "ar"
       ? currentArabicName
       : currentSurahName;
+
+  // Subtitle shown in the desktop card when nothing is playing
+  const idleSubtitle = !isPlaying && !currentPlayingAyah
+    ? (showHome
+      ? (lang === "ar" ? "اضغط ▶ للاستماع" : lang === "fr" ? "Appuyez ▶ pour écouter" : "Press ▶ to listen")
+      : null)
+    : null;
 
   const warshStrictLabel =
     lang === "ar"
@@ -492,10 +506,10 @@ export default function AudioPlayer() {
         className="fixed bottom-0 left-0 right-0 z-300 text-[#f0ead6] rounded-t-2xl"
         style={{
           background: "var(--player-glass)",
-          borderTop: "1px solid rgba(255,255,255,0.1)",
+          borderTop: "1px solid var(--player-border)",
           boxShadow: expanded
-            ? "0 -8px 48px rgba(0,0,0,0.38), 0 -1px 0 rgba(255,255,255,0.07)"
-            : "0 -4px 32px rgba(0,0,0,0.28), 0 -1px 0 rgba(255,255,255,0.06)",
+            ? "0 -18px 50px rgba(12,18,14,0.2), 0 -1px 0 rgba(255,255,255,0.05)"
+            : "0 -10px 32px rgba(12,18,14,0.14), 0 -1px 0 rgba(255,255,255,0.04)",
         }}
         role="region"
         aria-label={
@@ -511,9 +525,9 @@ export default function AudioPlayer() {
             <div
               className="inline-flex items-center gap-1.5 px-2 py-0.75 rounded-full text-[0.62rem] font-semibold"
               style={{
-                background: "rgba(212,168,32,0.14)",
-                border: "1px solid rgba(212,168,32,0.28)",
-                color: "#f5d785",
+                background: "var(--player-chip-bg)",
+                border: "1px solid var(--player-chip-border)",
+                color: "var(--player-chip-text)",
                 fontFamily: "var(--font-ui)",
               }}
             >
@@ -676,7 +690,7 @@ export default function AudioPlayer() {
           <div
             className="px-3.5 pt-3 pb-4 border-t border-white/[0.07]"
             style={{
-              background: "rgba(0,0,0,0.15)",
+              background: "var(--player-panel-bg)",
               animation: "fadeInUp 0.18s var(--ease, ease)",
             }}
           >
@@ -707,7 +721,7 @@ export default function AudioPlayer() {
               <span className="text-[0.6rem] font-bold uppercase tracking-widest text-[rgba(240,234,214,0.35)]">
                 {t("audio.reciter", lang)}
               </span>
-              <div className="grid grid-cols-3 gap-1 mt-1.5">
+              <div className="grid grid-cols-2 gap-1 mt-1.5">
                 {currentReciters.map((r) => {
                   const active = reciter === r.id;
                   return (
@@ -914,10 +928,10 @@ export default function AudioPlayer() {
           top: cardPos.y,
           width: 264,
           background: "var(--player-glass)",
-          border: "1px solid rgba(212,168,32,0.18)",
+          border: "1px solid var(--player-border)",
           boxShadow: isPlaying
-            ? "0 8px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(212,168,32,0.2), 0 2px 8px rgba(184,134,11,0.15)"
-            : "0 6px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.07)",
+            ? "0 18px 50px rgba(11,20,15,0.22), 0 0 0 1px rgba(192,154,74,0.18), 0 2px 8px rgba(109,85,26,0.08)"
+            : "0 14px 42px rgba(11,20,15,0.16), 0 0 0 1px rgba(255,255,255,0.05)",
           transition: isDragging ? "none" : "box-shadow 0.3s ease",
         }}
         role="region"
@@ -934,9 +948,9 @@ export default function AudioPlayer() {
             <div
               className="inline-flex items-center gap-1.5 px-2 py-0.75 rounded-full text-[0.6rem] font-bold"
               style={{
-                background: "rgba(212,168,32,0.14)",
-                border: "1px solid rgba(212,168,32,0.28)",
-                color: "#f5d785",
+                background: "var(--player-chip-bg)",
+                border: "1px solid var(--player-chip-border)",
+                color: "var(--player-chip-text)",
                 fontFamily: "var(--font-ui)",
               }}
             >
@@ -958,7 +972,7 @@ export default function AudioPlayer() {
               <div
                 className="text-[0.82rem] font-bold leading-tight truncate"
                 style={{
-                  color: "rgba(253,243,213,0.95)",
+                    color: "var(--player-text-strong)",
                   fontFamily: "var(--font-ui)",
                 }}
               >
@@ -972,19 +986,19 @@ export default function AudioPlayer() {
               <div
                 className="text-[0.67rem] mt-0.5 truncate"
                 style={{
-                  color: "rgba(212,168,32,0.75)",
+                    color: "var(--player-text-soft)",
                   fontFamily: "var(--font-ui)",
                 }}
               >
-                {reciterLabel || "—"}
+                {idleSubtitle || reciterLabel || "—"}
               </div>
               {isWarshMode && warshStrictMode && (
                 <span
                   className="inline-block mt-0.5 px-1.5 py-px rounded-full text-[0.55rem] font-bold tracking-wide border"
                   style={{
-                    background: "rgba(212,168,32,0.12)",
-                    color: "#f5d785",
-                    borderColor: "rgba(212,168,32,0.3)",
+                    background: "var(--player-chip-bg)",
+                    color: "var(--player-chip-text)",
+                    borderColor: "var(--player-chip-border)",
                   }}
                 >
                   Warsh ✓
@@ -1037,9 +1051,9 @@ export default function AudioPlayer() {
               onClick={cycleSpeed}
               className="px-2 py-0.75 rounded-md text-[0.62rem] font-bold transition-all duration-150"
               style={{
-                background: "rgba(212,168,32,0.1)",
-                border: "1px solid rgba(212,168,32,0.2)",
-                color: "rgba(212,168,32,0.75)",
+                background: "var(--player-chip-bg)",
+                border: "1px solid var(--player-chip-border)",
+                color: "var(--player-chip-text)",
                 fontFamily: "var(--font-ui)",
               }}
               title="Vitesse"
@@ -1059,14 +1073,14 @@ export default function AudioPlayer() {
               className="w-12 h-12 flex items-center justify-center rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(212,168,32,0.5)]"
               style={{
                 background: isPlaying
-                  ? "linear-gradient(135deg, var(--emerald-lit,#2d8a5a) 0%, var(--emerald,#1b5e3b) 100%)"
-                  : "linear-gradient(135deg, #1b5e3b 0%, #0e3d26 100%)",
-                border: "1.5px solid rgba(212,168,32,0.35)",
-                color: "#fbf3d5",
+                  ? "linear-gradient(135deg, var(--player-accent-strong) 0%, var(--player-accent) 100%)"
+                  : "linear-gradient(135deg, var(--player-accent) 0%, var(--player-accent-deep) 100%)",
+                border: "1.5px solid rgba(192,154,74,0.32)",
+                color: "#fbf7ea",
                 fontSize: "1.05rem",
                 boxShadow: isPlaying
-                  ? "0 4px 18px rgba(27,94,59,0.5), 0 1px 4px rgba(0,0,0,0.3)"
-                  : "0 2px 12px rgba(0,0,0,0.35)",
+                  ? "0 10px 26px rgba(28,76,53,0.28), 0 1px 4px rgba(0,0,0,0.14)"
+                  : "0 6px 16px rgba(0,0,0,0.18)",
                 transform: isPlaying ? "scale(1.04)" : "scale(1)",
               }}
             >
@@ -1125,9 +1139,9 @@ export default function AudioPlayer() {
             onClick={() => setExpanded((v) => !v)}
             className="flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-[0.63rem] transition-all duration-150 w-full"
             style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "rgba(240,234,214,0.45)",
+              background: "var(--player-panel-bg)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              color: "rgba(240,234,214,0.52)",
               fontFamily: "var(--font-ui)",
             }}
           >
@@ -1152,7 +1166,7 @@ export default function AudioPlayer() {
             <div
               className="flex flex-col gap-3 border-t pt-3"
               style={{
-                borderColor: "rgba(212,168,32,0.12)",
+                borderColor: "rgba(192,154,74,0.12)",
                 animation: "fadeInUp 0.18s var(--ease, ease)",
               }}
             >
@@ -1167,7 +1181,7 @@ export default function AudioPlayer() {
                 >
                   {t("audio.reciter", lang)}
                 </div>
-                <div className="grid grid-cols-3 gap-1">
+                <div className="grid grid-cols-2 gap-1">
                   {currentReciters.map((r) => {
                     const active = reciter === r.id;
                     return (

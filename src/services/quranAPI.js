@@ -23,6 +23,10 @@ export function wasWarshTextFallback() { return lastWarshFallback; }
 const TRANSLATION_EDITIONS = {
   fr: 'fr.hamidullah',
   en: 'en.sahih',
+  es: 'es.cortes',
+  de: 'de.aburida',
+  tr: 'tr.diyanet',
+  ur: 'ur.junagarhi',
 };
 
 // In-memory cache with size limit
@@ -48,7 +52,10 @@ const IDB_CACHE_TTL_BY_KIND = {
 function getCacheKindByUrl(url) {
   const u = String(url || '').toLowerCase();
   if (u.includes('/audio/')) return 'audio';
-  if (u.includes('fr.hamidullah') || u.includes('en.sahih') || /\/search\//.test(u)) return 'translation';
+  if (
+    Object.values(TRANSLATION_EDITIONS).some((edition) => u.includes(String(edition).toLowerCase())) ||
+    /\/search\//.test(u)
+  ) return 'translation';
   return 'text';
 }
 
@@ -235,20 +242,36 @@ export async function getSurahTranslation(surahNum, lang = 'fr', signal) {
  * Fetch surah text + translation in parallel
  */
 export async function getSurahFull(surahNum, riwaya = 'hafs', transLang = 'fr', signal) {
-  const [arabicResult, translationResult] = await Promise.allSettled([
+  const needsHafsForTranslit = riwaya === 'warsh';
+
+  const promises = [
     getSurahText(surahNum, riwaya, signal),
     getSurahTranslation(surahNum, transLang, signal),
-  ]);
+  ];
 
-  if (arabicResult.status !== 'fulfilled') {
-    throw arabicResult.reason || new Error('Arabic text fetch failed');
+  if (needsHafsForTranslit) {
+    promises.push(getSurahText(surahNum, 'hafs', signal));
   }
 
-  const translation = translationResult.status === 'fulfilled'
-    ? translationResult.value
-    : { ayahs: [] };
+  const results = await Promise.allSettled(promises);
 
-  const arabic = arabicResult.value;
+  if (results[0].status !== 'fulfilled') {
+    throw results[0].reason || new Error('Arabic text fetch failed');
+  }
+
+  const arabic = results[0].value;
+  const translation = results[1].status === 'fulfilled' ? results[1].value : { ayahs: [] };
+
+  if (needsHafsForTranslit && results[2].status === 'fulfilled') {
+    const hafs = results[2].value;
+    if (arabic.ayahs && hafs.ayahs) {
+      arabic.ayahs = arabic.ayahs.map((a, i) => ({
+        ...a,
+        hafsText: hafs.ayahs[i]?.text || null
+      }));
+    }
+  }
+
   return { arabic, translation };
 }
 
@@ -281,20 +304,36 @@ export async function getPageTranslation(pageNum, lang = 'fr', signal) {
 }
 
 export async function getPageFull(pageNum, riwaya = 'hafs', transLang = 'fr', signal) {
-  const [arabicResult, translationResult] = await Promise.allSettled([
+  const needsHafsForTranslit = riwaya === 'warsh';
+
+  const promises = [
     getPage(pageNum, riwaya, signal),
     getPageTranslation(pageNum, transLang, signal),
-  ]);
+  ];
 
-  if (arabicResult.status !== 'fulfilled') {
-    throw arabicResult.reason || new Error('Arabic page fetch failed');
+  if (needsHafsForTranslit) {
+    promises.push(getPage(pageNum, 'hafs', signal));
   }
 
-  const translation = translationResult.status === 'fulfilled'
-    ? translationResult.value
-    : { ayahs: [] };
+  const results = await Promise.allSettled(promises);
 
-  const arabic = arabicResult.value;
+  if (results[0].status !== 'fulfilled') {
+    throw results[0].reason || new Error('Arabic page fetch failed');
+  }
+
+  const arabic = results[0].value;
+  const translation = results[1].status === 'fulfilled' ? results[1].value : { ayahs: [] };
+
+  if (needsHafsForTranslit && results[2].status === 'fulfilled') {
+    const hafs = results[2].value;
+    if (arabic.ayahs && hafs.ayahs) {
+      arabic.ayahs = arabic.ayahs.map((a, i) => ({
+        ...a,
+        hafsText: hafs.ayahs[i]?.text || null
+      }));
+    }
+  }
+
   return { arabic, translation };
 }
 

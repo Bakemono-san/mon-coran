@@ -33,35 +33,44 @@ export default function BookmarksModal() {
     <div className="modal-overlay" onClick={close}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">
-            <i className="fas fa-bookmark" style={{ color: 'var(--gold)' }}></i>{' '}
-            {t('bookmarks.title', lang)}
-          </h2>
-          <button className="icon-btn" onClick={close}>
+          <div className="modal-title-stack">
+            <div className="modal-kicker">{lang === 'fr' ? 'Bibliothèque' : lang === 'ar' ? 'المكتبة' : 'Library'}</div>
+            <h2 className="modal-title">
+              <i className="fas fa-bookmark"></i>
+              {t('bookmarks.title', lang)}
+            </h2>
+            <div className="modal-subtitle">
+              {lang === 'fr'
+                ? 'Retrouvez rapidement vos versets enregistrés.'
+                : lang === 'ar'
+                  ? 'استرجع الآيات المحفوظة بسرعة.'
+                  : 'Quick access to your saved verses.'}
+            </div>
+          </div>
+          <button className="modal-close" onClick={close}>
             <i className="fas fa-times"></i>
           </button>
         </div>
 
-        <div className="bookmarks-body">
+        <div className="modal-list">
           {bookmarks.length === 0 ? (
-            <p className="bookmarks-empty">
-              <i className="fas fa-bookmark" style={{ fontSize: '2rem', opacity: 0.2 }}></i>
-              <br />
-              {t('bookmarks.empty', lang)}
-            </p>
+            <div className="modal-empty">
+              <i className="fas fa-bookmark"></i>
+              <div>{t('bookmarks.empty', lang)}</div>
+            </div>
           ) : (
             bookmarks.map(bm => {
               const s = getSurah(bm.surah);
               return (
-                <div key={bm.id} className="bookmark-item">
-                  <button className="bookmark-info" onClick={() => goTo(bm.surah, bm.ayah)}>
-                    <span className="bookmark-surah">{s?.ar}</span>
-                    <span className="bookmark-ref">
+                <div key={bm.id} className="modal-item-card">
+                  <button className="modal-item-main" onClick={() => goTo(bm.surah, bm.ayah)}>
+                    <span className="modal-item-ar">{s?.ar}</span>
+                    <span className="modal-item-meta" style={{ display: 'block', marginTop: '0.24rem', marginBottom: 0 }}>
                       {t('quran.ayah', lang)} {lang === 'ar' ? toAr(bm.ayah) : bm.ayah}
                     </span>
                   </button>
                   <button
-                    className="icon-btn bookmark-delete"
+                    className="modal-action-btn modal-delete-btn"
                     onClick={() => handleRemove(bm.surah, bm.ayah)}
                   >
                     <i className="fas fa-trash-alt"></i>
@@ -72,60 +81,6 @@ export default function BookmarksModal() {
           )}
         </div>
       </div>
-
-      <style>{`
-        .bookmarks-body {
-          padding: 0.7rem;
-          overflow-y: auto;
-          max-height: 65vh;
-        }
-        .bookmarks-empty {
-          text-align: center;
-          color: var(--text-muted);
-          padding: 3rem 1rem;
-          font-family: 'Cairo', sans-serif;
-        }
-        .bookmark-item {
-          display: flex;
-          align-items: center;
-          padding: 0.52rem;
-          margin-bottom: 0.35rem;
-          border: 1px solid var(--border);
-          background: var(--bg);
-          border-radius: var(--radius);
-          transition: all 0.15s;
-        }
-        .bookmark-item:hover {
-          background: var(--primary-light);
-          border-color: var(--primary);
-        }
-        .bookmark-info {
-          flex: 1;
-          border: none;
-          background: transparent;
-          text-align: start;
-          cursor: pointer;
-          padding: 0.3rem;
-          color: var(--text);
-        }
-        .bookmark-surah {
-          font-family: 'Amiri', serif;
-          font-size: 1rem;
-          display: block;
-        }
-        .bookmark-ref {
-          font-family: 'Cairo', sans-serif;
-          font-size: 0.75rem;
-          color: var(--text-muted);
-        }
-        .bookmark-delete {
-          color: var(--text-muted);
-          width: 32px;
-          height: 32px;
-          font-size: 0.75rem;
-        }
-        .bookmark-delete:hover { color: var(--primary); }
-      `}</style>
     </div>
   );
 }

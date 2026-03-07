@@ -5,6 +5,8 @@ import { arabicToLatin } from '../../data/transliteration';
 import AyahActions from '../AyahActions';
 import SmartAyahRenderer from './SmartAyahRenderer';
 import WordByWordDisplay from './WordByWordDisplay';
+import TajwidLegend from './TajwidLegend';
+import MemorizationText from './MemorizationText';
 
 /**
  * AyahBlock component – renders a single verse with metadata and actions.
@@ -13,10 +15,14 @@ const AyahBlock = React.memo(function AyahBlock({
     ayah, isPlaying, isActive, trans, showTajwid, showTranslation,
     showWordByWord, showTransliteration, showWordTranslation,
     surahNum, calibration, riwaya, lang, onToggleActive, ayahId,
-    progress, fontSize,
+    progress, fontSize, memMode,
 }) {
-    const ayahTransliteration = showTranslation && showTransliteration && !showWordByWord
-        ? arabicToLatin(ayah.text)
+    // Transliteration logic:
+    // 1. If riwaya is Warsh, we must use ayah.hafsText (standard Arabic) instead of ayah.text (PUA codepoints).
+    // 2. We decouple it from showTranslation so users can see just phonetic + Arabic.
+    const transliterationSource = (riwaya === 'warsh' && ayah.hafsText) ? ayah.hafsText : ayah.text;
+    const ayahTransliteration = showTransliteration && !showWordByWord
+        ? arabicToLatin(transliterationSource, riwaya)
         : '';
 
     return (
@@ -25,54 +31,67 @@ const AyahBlock = React.memo(function AyahBlock({
             role="listitem"
             aria-label={`${t('quran.ayah', lang)} ${ayah.numberInSurah}`}
             aria-current={isPlaying ? 'true' : undefined}
-            className={`ayah-block${isPlaying ? ' playing' : ''}${isActive ? ' active' : ''}${showWordByWord ? ' wbw-mode' : ''}`}
+            className={`qc-ayah-block${isPlaying ? ' is-playing' : ''}${isActive ? ' is-active' : ''}`}
             onClick={onToggleActive}
             tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onToggleActive();
-                }
-            }}
         >
-            <div className="ayah-text-ar">
-                {/* WordByWordDisplay handles Hafs only (fetches per-word translations).
-                    For Warsh QCF4 (ayah.warshWords), SmartAyahRenderer handles
-                    both the QCF4 rendering AND the karaoke highlighting internally. */}
-                {showWordByWord && !(ayah.warshWords?.length > 0) ? (
-                    <WordByWordDisplay
-                        surah={surahNum}
-                        ayah={ayah.numberInSurah}
-                        text={ayah.text}
-                        isPlaying={isPlaying}
-                        progress={progress}
-                        showTransliteration={showTransliteration}
-                        showWordTranslation={showWordTranslation}
-                        fontSize={fontSize}
-                    />
-                ) : (
-                    <SmartAyahRenderer
-                        ayah={ayah}
-                        showTajwid={showTajwid}
-                        isPlaying={isPlaying}
-                        surahNum={surahNum}
-                        calibration={calibration}
-                        riwaya={riwaya}
-                    />
-                )}
-                <span className="ayah-number">
-                    ﴿{lang === 'ar' ? toAr(ayah.numberInSurah) : ayah.numberInSurah}﴾
-                </span>
+            <div className="qc-ayah-container">
+                {/* Left side: Verse Number */}
+                <div className="qc-ayah-sidebar">
+                    <span className="qc-ayah-num">
+                        {ayah.numberInSurah}
+                    </span>
+                </div>
+
+                {/* Main Content Area */}
+                <div className="qc-ayah-content">
+                    <div className="qc-ayah-text-ar">
+                        {memMode ? (
+                            <MemorizationText
+                                text={ayah.hafsText || ayah.text}
+                                lang={lang}
+                            />
+                        ) : showWordByWord && !(ayah.warshWords?.length > 0) ? (
+                            <WordByWordDisplay
+                                surah={surahNum}
+                                ayah={ayah.numberInSurah}
+                                text={ayah.text}
+                                isPlaying={isPlaying}
+                                progress={progress}
+                                showTransliteration={showTransliteration}
+                                showWordTranslation={showWordTranslation}
+                                fontSize={fontSize}
+                            />
+                        ) : (
+                            <SmartAyahRenderer
+                                ayah={ayah}
+                                showTajwid={showTajwid}
+                                isPlaying={isPlaying}
+                                surahNum={surahNum}
+                                calibration={calibration}
+                                riwaya={riwaya}
+                            />
+                        )}
+                    </div>
+
+                    {showTranslation && trans && !showWordByWord && (
+                        <div className="qc-ayah-translation">{trans.text}</div>
+                    )}
+
+                    {ayahTransliteration && (
+                        <div className="qc-ayah-transliteration">{ayahTransliteration}</div>
+                    )}
+
+                    {isActive && (
+                        <div className="qc-ayah-actions-panel">
+                            <AyahActions surah={surahNum} ayah={ayah.numberInSurah} ayahData={ayah} />
+                            {showTajwid && riwaya === 'hafs' && (
+                                <TajwidLegend riwaya={riwaya} />
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
-            {showTranslation && trans && !showWordByWord && (
-                <div className="ayah-translation">{trans.text}</div>
-            )}
-            {ayahTransliteration && (
-                <div className="ayah-transliteration">{ayahTransliteration}</div>
-            )}
-            {isActive && (
-                <AyahActions surah={surahNum} ayah={ayah.numberInSurah} ayahData={ayah} />
-            )}
         </div>
     );
 });

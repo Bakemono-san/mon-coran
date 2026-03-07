@@ -12,25 +12,18 @@ const SurahHeader = React.memo(function SurahHeader({ surahNum, lang }) {
     const surahLabel = lang === 'ar' ? toAr(surahNum) : surahNum;
 
     return (
-        <div className="surah-header">
-            <div className="surah-header-frame">
-                <div className="surah-header-inner">
-                    {/* Surah number chip */}
-                    <span className="surah-header-num-chip">{surahLabel}</span>
-                    {/* Arabic name */}
-                    <span className="surah-header-name">{s.ar}</span>
-                    {/* Metadata row */}
-                    <span className="surah-header-info">
-                        {lang === 'fr' ? s.fr : lang === 'en' ? s.en : s.en}
-                        &nbsp;·&nbsp;
-                        {s.ayahs}&nbsp;{t('quran.ayahs', lang)}
-                        &nbsp;·&nbsp;
-                        {s.type === 'Meccan'
-                            ? t('quran.meccan', lang)
-                            : t('quran.medinan', lang)
-                        }
-                    </span>
-                </div>
+        <div className="qc-surah-header">
+            <div className="qc-header-top">
+                <span className="qc-header-num">{surahLabel}</span>
+            </div>
+            <h1 className="qc-header-name-ar">{s.ar}</h1>
+            <div className="qc-header-meta">
+                <span className="qc-header-name-en">
+                    {lang === 'fr' ? s.fr : s.en}
+                </span>
+                <span className="qc-header-details">
+                    {s.ayahs} {t('quran.ayahs', lang)} · {s.type === 'Meccan' ? t('quran.meccan', lang) : t('quran.medinan', lang)}
+                </span>
             </div>
         </div>
     );

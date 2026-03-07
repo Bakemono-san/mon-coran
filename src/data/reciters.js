@@ -31,7 +31,7 @@ const RECITERS = {
       name: 'عبد الباسط عبد الصمد (مجود)',
       nameEn: 'Abdul Basit (Mujawwad)',
       nameFr: 'Abdul Basit (Mujawwad)',
-      style: 'tartil',
+      style: 'mujawwad',
       cdn: 'ar.abdulbasitmujawwad',
       cdnType: 'islamic',
     },
@@ -113,7 +113,7 @@ const RECITERS = {
       nameEn: 'Saad Al-Ghamdi',
       nameFr: 'Saad Al-Ghamdi',
       style: 'murattal',
-      cdn: 'Saad_Al_Ghamdi_128kbps',
+      cdn: 'Saad_Al-Ghamdi_128kbps',
       cdnType: 'everyayah',
     },
     {
@@ -131,7 +131,7 @@ const RECITERS = {
       nameEn: 'Maher Al-Muaiqly',
       nameFr: 'Maher Al-Muaiqly',
       style: 'murattal',
-      cdn: 'MauroAl-Muaiqely128kbps',
+      cdn: 'Maher_Al_Muaiqly_128kbps',
       cdnType: 'everyayah',
     },
     {
