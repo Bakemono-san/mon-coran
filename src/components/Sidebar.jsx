@@ -105,149 +105,73 @@ export default function Sidebar() {
 
   return (
     <>
-      {sidebarOpen && (
-        <div className="sidebar-overlay" onClick={() => set({ sidebarOpen: false })} />
-      )}
-
       <aside className={cn("sidebar", sidebarOpen && "open")} role="navigation">
-        {/* ── Tabs ── */}
         <div className="sidebar-tabs-container">
-          <div className="sidebar-shell-header">
-            <div>
-              <div className="sidebar-shell-kicker">
-                {lang === "fr"
-                  ? "Navigation"
-                  : lang === "ar"
-                    ? "التنقل"
-                    : "Navigation"}
-              </div>
-              <div className="sidebar-shell-title">
-                {lang === "fr"
-                  ? "Accès rapide au Coran"
-                  : lang === "ar"
-                    ? "وصول سريع إلى القرآن"
-                    : "Quick Quran access"}
-              </div>
+          {/* Top row: Tabs pill & Close button */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex bg-[var(--bg-secondary)] rounded-full p-1 border border-[var(--border)] overflow-hidden">
+              {availableTabs.map((t2) => (
+                <button
+                  key={t2}
+                  className={cn("sidebar-tab-trigger", tab === t2 && "active")}
+                  onClick={() => setTab(t2)}
+                >
+                  {t2 === "surah" ? t("sidebar.surahs", lang) : t2 === "juz" ? t("sidebar.juz", lang) : t("quran.page", lang)}
+                </button>
+              ))}
             </div>
-            <div className="sidebar-shell-chip">
-              {riwaya === "warsh" ? "Warsh" : "Hafs"}
-            </div>
+
+            <button
+              className="w-8 h-8 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text)] transition-colors rounded-full hover:bg-[var(--bg-secondary)]"
+              onClick={() => dispatch({ type: "TOGGLE_SIDEBAR" })}
+            >
+              <i className="fas fa-times text-[1.1rem]" />
+            </button>
           </div>
-          {activeSummary && (
-            <div className="sidebar-active-summary">
-              <span className="sidebar-active-summary__label">
-                {lang === "fr"
-                  ? "Lecture en cours"
-                  : lang === "ar"
-                    ? "القراءة الحالية"
-                    : "Current reading"}
-              </span>
-              <span className="sidebar-active-summary__value">{activeSummary}</span>
-            </div>
-          )}
-          <div className="sidebar-tabs-list">
-            {availableTabs.map((t2) => (
-              <button
-                key={t2}
-                className={cn("sidebar-tab-trigger", tab === t2 && "active")}
-                onClick={() => setTab(t2)}
-              >
-                {t2 === "surah" && <><i className="fas fa-align-justify" />{t("sidebar.surahs", lang)}</>}
-                {t2 === "juz" && <><i className="fas fa-book-open" />{t("sidebar.juz", lang)}</>}
-                {t2 === "page" && <><i className="fas fa-file-lines" />{t("quran.page", lang)}</>}
-              </button>
-            ))}
+
+          <div className="text-[0.8rem] text-[var(--text-muted)] italic mb-4 opacity-80">
+            {lang === "fr" ? "Astuce: naviguez avec" : lang === "ar" ? "نصيحة: جرب التنقل باستخدام" : "Tip: try navigating with"}
+            <kbd className="font-sans text-[0.65rem] border border-[var(--border)] shadow-sm rounded px-1.5 py-0.5 bg-[var(--bg-primary)] text-[var(--text)] not-italic mx-1.5 font-bold tracking-wider">ctrl K</kbd>
           </div>
         </div>
 
         {/* ── Search (Surah Tab) ── */}
         {tab === "surah" && (
           <div className="sidebar-search-container">
-            <div className="sidebar-search-box">
-              <i className="fas fa-search sidebar-search-icon" aria-hidden="true" />
-              <input
-                type="text"
-                placeholder={t("search.placeholder", lang)}
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="sidebar-search-input"
-              />
-            </div>
+            <input
+              type="text"
+              placeholder={t("search.placeholder", lang)}
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="sidebar-search-input"
+            />
           </div>
         )}
 
         {/* ── List Area ── */}
         <div className="sidebar-content">
-          {/* Recent surahs — shown at top of surah tab when no filter active */}
-          {tab === "surah" && !filter && recentSurahs.length > 0 && (
-            <div className="sidebar-recent-section">
-              <div className="sidebar-recent-title">
-                <i className="fas fa-clock-rotate-left" />
-                {lang === 'fr' ? 'Récemment lus' : lang === 'ar' ? 'تمت قراءتها مؤخراً' : 'Recently read'}
-              </div>
-              {recentSurahs.map(n => {
-                const s = SURAHS[n - 1];
-                if (!s) return null;
-                const isActive = s.n === currentSurah && displayMode === "surah";
-                return (
-                  <div
-                    key={`r-${s.n}`}
-                    className={cn("sidebar-item-row sidebar-item-row--recent", isActive && "active")}
-                    onClick={() => goSurah(s.n)}
-                  >
-                    <div className="qc-sidebar-num">{s.n}</div>
-                    <div className="qc-sidebar-label">
-                      <div className="qc-sidebar-main">
-                        <span className="qc-sidebar-en">{s.en}</span>
-                        <span className="qc-sidebar-ar">{s.ar}</span>
-                      </div>
-                    </div>
-                    <i className="fas fa-clock-rotate-left" style={{ fontSize: '0.6rem', opacity: 0.4, flexShrink: 0 }} />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
           {tab === "surah" && filteredSurahs.length === 0 && (
             <div className="sidebar-empty-state">
-              <i className="fas fa-search" aria-hidden="true" />
               <div className="sidebar-empty-state__title">
-                {lang === "fr"
-                  ? "Aucune sourate trouvée"
-                  : lang === "ar"
-                    ? "لم يتم العثور على سورة"
-                    : "No surah found"}
-              </div>
-              <div className="sidebar-empty-state__text">
-                {lang === "fr"
-                  ? "Essayez un autre nom, un numéro ou une translittération."
-                  : lang === "ar"
-                    ? "جرّب اسماً آخر أو رقماً أو كتابة مختلفة."
-                    : "Try another name, number, or transliteration."}
+                {lang === "fr" ? "Aucune sourate trouvée" : lang === "ar" ? "لم يتم العثور على سورة" : "No surah found"}
               </div>
             </div>
           )}
 
-          {tab === "surah" && filteredSurahs.map((s) => {
+          {tab === "surah" && filteredSurahs.map((s, idx) => {
             const isActive = s.n === currentSurah && displayMode === "surah";
             return (
               <div
                 key={s.n}
                 ref={isActive ? activeItemRef : null}
                 className={cn("sidebar-item-row", isActive && "active")}
+                style={{ animationDelay: `${idx * 15}ms` }}
                 onClick={() => goSurah(s.n)}
               >
                 <div className="qc-sidebar-num">{s.n}</div>
-                <div className="qc-sidebar-label">
-                  <div className="qc-sidebar-main">
-                    <span className="qc-sidebar-en">{s.en}</span>
-                    <span className="qc-sidebar-ar">{s.ar}</span>
-                  </div>
-                  <div className="qc-sidebar-details">
-                    {s.ayahs} {t("quran.ayah", lang)}
-                  </div>
-                </div>
+                <div className="qc-sidebar-en">{s.en}</div>
+                <div className="qc-sidebar-ar">{s.ar}</div>
+                {isActive && <div className="sidebar-item-indicator" />}
               </div>
             );
           })}
