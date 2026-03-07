@@ -88,7 +88,7 @@ export default function App() {
       number: globalStart + i + 1,
     }));
     audioService.loadPlaylist(items, rec.cdn, rec.cdnType || "islamic");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showHome, state.riwaya, state.reciter, state.currentSurah, state.warshStrictMode]);
 
   /* ── Keyboard shortcuts ── */
@@ -232,14 +232,11 @@ export default function App() {
           </Suspense>
         )}
 
-        {/* Overlay for mobile sidebar */}
+        {/* Invisible overlay for sidebar (to capture outside clicks without dimming) */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-190 backdrop-blur-sm transition-opacity duration-200"
-            style={{
-              top: "var(--header-h)",
-              background: "var(--bg-overlay)",
-            }}
+            className="fixed inset-0 z-190"
+            style={{ top: "var(--header-h)" }}
             onClick={() => dispatch({ type: "TOGGLE_SIDEBAR" })}
             aria-hidden="true"
           />
