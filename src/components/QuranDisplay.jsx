@@ -1114,14 +1114,6 @@ export default function QuranDisplay() {
           {/* Layout toggle: list ↔ mushaf ↔ word-by-word ↔ memorization */}
           <div className="mushaf-layout-toggle-bar">
             <button
-              className={`mushaf-layout-btn${mushafLayout === "list" ? " active" : ""}`}
-              onClick={() => set({ mushafLayout: "list" })}
-              title={lang === "fr" ? "Vue liste" : "List view"}
-            >
-              <i className="fas fa-list-ul"></i>
-              {lang === "fr" ? "Liste" : "List"}
-            </button>
-            <button
               className={`mushaf-layout-btn${mushafLayout === "mushaf" ? " active" : ""}`}
               onClick={() => set({ mushafLayout: "mushaf" })}
               title={lang === "fr" ? "Vue Mushaf" : "Mushaf view"}
