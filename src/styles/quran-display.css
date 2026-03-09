@@ -2522,6 +2522,29 @@
     position: relative;
 }
 
+/* Clean page mode variant - Quran.com style */
+.quran-mode-pane--page .mp-frame {
+    margin-bottom: 2rem;
+}
+
+.quran-mode-pane--page .mp-outer-border {
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.quran-mode-pane--page .mp-inner-border {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+.quran-mode-pane--page .mp-inner-border::before,
+.quran-mode-pane--page .mp-inner-border::after {
+    display: none;
+}
+
 /* ── Cadre extérieur (parchment) ── */
 .mp-outer-border {
     background: var(--mp-bg-outer);
@@ -2579,7 +2602,14 @@
         rgba(184, 134, 11, 0.2) 100%
     );
     border-bottom: 2px solid var(--mp-border);
-    direction: rtl;
+}
+
+/* Page mode: simpler header */
+.quran-mode-pane--page .mp-header {
+    background: transparent;
+    border-bottom: none;
+    padding: 1.5rem 1rem 1rem;
+    margin-bottom: 1rem;
 }
 
 .mp-header-side {
@@ -2678,6 +2708,11 @@
     );
 }
 
+/* Page mode: hide separators */
+.quran-mode-pane--page .mp-separator {
+    display: none;
+}
+
 .mp-separator--bottom {
     border-top: 1px solid var(--mp-border-dim);
     border-bottom: none;
@@ -2723,9 +2758,22 @@
     word-break: break-word;
 }
 
+/* Page mode: cleaner, more centered layout */
+.quran-mode-pane--page .mp-body {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    line-height: 2.6;
+    word-spacing: 0.3em;
+    letter-spacing: 0.01em;
+}
+
 /* QCF4: interligne plus large pour les glyphes PUA */
 .mp-body-qcf4 {
     line-height: 3.2;
+}
+
+.quran-mode-pane--page .mp-body-qcf4 {
+    line-height: 2.8;
 }
 
 /* ── Basmala ── */
@@ -2738,6 +2786,12 @@
     font-feature-settings: "liga" 1;
     line-height: 2.2;
     letter-spacing: 0.02em;
+}
+
+.quran-mode-pane--page .mp-basmala {
+    font-size: 1.15em;
+    padding-bottom: 1em;
+    margin-bottom: 0.5rem;
 }
 
 /* ── Span d'un seul ayah ── */
@@ -2792,6 +2846,16 @@
     vertical-align: middle;
 }
 
+/* Page mode: simpler verse markers */
+.quran-mode-pane--page .mp-ayah-marker {
+    margin: 0 0.25em;
+}
+
+.quran-mode-pane--page .mp-ayah-marker-svg {
+    width: 1.1em;
+    height: 1.1em;
+}
+
 /* Couleurs SVG des anneaux */
 .mp-ring-outer {
     stroke: var(--mp-gold);
@@ -2831,6 +2895,11 @@
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     font-family: var(--font-ui);
+}
+
+/* Page mode: hide translations for cleaner view */
+.quran-mode-pane--page .mp-translations {
+    display: none;
 }
 
 .mp-trans-row {
