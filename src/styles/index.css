@@ -8026,7 +8026,7 @@ button,
 
 /* Primary button */
 .btn-primary,
-button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon) {
+button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):not(.quran-com-card):not(.hp-quick-card):not(.qc-play-btn):not(.qc-continue-btn) {
     background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 100%);
     color: white;
     box-shadow: var(--shadow-emerald);
@@ -8034,13 +8034,13 @@ button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon) {
 }
 
 .btn-primary:hover,
-button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):hover {
+button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):not(.quran-com-card):not(.hp-quick-card):not(.qc-play-btn):not(.qc-continue-btn):hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(27, 94, 59, 0.3);
+    box-shadow: 0 8px 20px rgba(44, 164, 171, 0.3);
 }
 
 .btn-primary:active,
-button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):active {
+button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):not(.quran-com-card):not(.hp-quick-card):not(.qc-play-btn):not(.qc-continue-btn):active {
     transform: translateY(0);
 }
 

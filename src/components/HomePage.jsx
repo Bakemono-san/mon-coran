@@ -152,6 +152,7 @@ function SurahCard({ surah, onClick, onPlay, isActive, lang, isPlaying }) {
   const displayName = lang === "fr" ? (surah.fr || surah.en) : surah.en;
   return (
     <button
+      type="button"
       className={cn("quran-com-card", "quran-com-card--grid", isActive && "quran-com-card--active")}
       onClick={() => onClick(surah.n)}
     >
@@ -168,6 +169,7 @@ function SurahCard({ surah, onClick, onPlay, isActive, lang, isPlaying }) {
       <div className="qc-card-right">
         <span className="qc-ar">{surah.ar}</span>
         <button
+          type="button"
           className={cn("qc-play-btn", isPlaying && "qc-play-btn--active")}
           onClick={(e) => { e.stopPropagation(); onPlay(surah.n); }}
           title={lang === "ar" ? "استمع" : lang === "fr" ? "Écouter" : "Listen"}
@@ -185,6 +187,7 @@ function JuzCard({ juzData, onClick, isActive, lang }) {
   const { juz, name } = juzData;
   return (
     <button
+      type="button"
       className={cn("quran-com-card", "quran-com-card--juz", isActive && "quran-com-card--active")}
       onClick={() => onClick(juz)}
     >
@@ -376,7 +379,7 @@ export default function HomePage() {
           </div>
 
           {currentSurah > 0 && (
-            <button className="qc-continue-btn" onClick={continueReading}>
+            <button type="button" className="qc-continue-btn" onClick={continueReading}>
               <i className="fas fa-circle-play" />
               <span className="qc-continue-label">
                 {lang === "ar" ? "متابعة القراءة" : lang === "fr" ? "Continuer la lecture" : "Continue Reading"}
@@ -452,7 +455,7 @@ export default function HomePage() {
           {lang === "ar" ? "وصول سريع" : lang === "fr" ? "Sourates fréquentes" : "Frequent Surahs"}
         </h2>
         <div className="hp-quick-grid">
-          <button className="hp-quick-card hp-quick-card--duas" onClick={openDuas}>
+          <button type="button" className="hp-quick-card hp-quick-card--duas" onClick={openDuas}>
             <span className="hp-quick-icon"><i className="fas fa-hands-praying"></i></span>
             <span className="hp-quick-ar">الدعاء</span>
             <span className="hp-quick-fr">
@@ -462,7 +465,7 @@ export default function HomePage() {
           {QUICK_ACCESS.map(item => {
             const s = SURAHS[item.n - 1];
             return (
-              <button key={item.n} className="hp-quick-card" onClick={() => goSurah(item.n)}>
+              <button type="button" key={item.n} className="hp-quick-card" onClick={() => goSurah(item.n)}>
                 <span className="hp-quick-icon"><i className={`fas ${item.icon}`}></i></span>
                 <span className="hp-quick-ar">{s?.ar}</span>
                 <span className="hp-quick-fr">
@@ -483,6 +486,7 @@ export default function HomePage() {
             <div className="hp-panel-tabs">
               {infoTabs.map(tab => (
                 <button
+                  type="button"
                   key={tab.id}
                   className={cn("hp-panel-tab", activeInfo === tab.id && "hp-panel-tab--on")}
                   onClick={() => setActiveInfo(tab.id)}
@@ -508,7 +512,7 @@ export default function HomePage() {
                   : bookmarks.slice(0, 10).map(bk => {
                     const s = SURAHS[bk.surah - 1];
                     return (
-                      <button key={bk.id} className="hp-info-row" onClick={() => goSurah(bk.surah)}>
+                      <button type="button" key={bk.id} className="hp-info-row" onClick={() => goSurah(bk.surah)}>
                         <span className="hp-info-icon"><i className="fas fa-bookmark"></i></span>
                         <div className="hp-info-body">
                           <span className="hp-info-ar">{s?.ar}</span>
@@ -536,7 +540,7 @@ export default function HomePage() {
                   : notes.slice(0, 10).map(note => {
                     const s = SURAHS[note.surah - 1];
                     return (
-                      <button key={note.id} className="hp-info-row" onClick={() => goSurah(note.surah)}>
+                      <button type="button" key={note.id} className="hp-info-row" onClick={() => goSurah(note.surah)}>
                         <span className="hp-info-icon"><i className="fas fa-pen-line"></i></span>
                         <div className="hp-info-body">
                           <span className="hp-info-ar">{s?.ar}</span>
@@ -566,7 +570,7 @@ export default function HomePage() {
                   {suggestionSet.surahs.map(({ n, fr, en, ar: arLabel }) => {
                     const s = SURAHS[n - 1];
                     return (
-                      <button key={n} className="hp-info-row" onClick={() => goSurah(n)}>
+                      <button type="button" key={n} className="hp-info-row" onClick={() => goSurah(n)}>
                         <span className="hp-info-num">{toAr(n)}</span>
                         <div className="hp-info-body">
                           <span className="hp-info-ar">{s.ar}</span>
@@ -589,6 +593,7 @@ export default function HomePage() {
           <div className="hp-list-header">
             <div className="hp-seg-ctrl">
               <button
+                type="button"
                 className={cn("hp-seg-btn", activeTab === "surah" && "hp-seg-btn--on")}
                 onClick={() => setActiveTab("surah")}
               >
@@ -596,6 +601,7 @@ export default function HomePage() {
                 {lang === "ar" ? "السور" : lang === "fr" ? "Sourates" : "Surahs"}
               </button>
               <button
+                type="button"
                 className={cn("hp-seg-btn", activeTab === "juz" && "hp-seg-btn--on")}
                 onClick={() => setActiveTab("juz")}
               >
@@ -618,14 +624,14 @@ export default function HomePage() {
                     onChange={e => setFilter(e.target.value)}
                   />
                   {filter && (
-                    <button className="hp-search-clear" onClick={() => setFilter("")} aria-label="Effacer">
+                    <button type="button" className="hp-search-clear" onClick={() => setFilter("")} aria-label="Effacer">
                       <i className="fas fa-xmark"></i>
                     </button>
                   )}
                 </div>
               )}
               {activeTab === "surah" && (
-                <button className="hp-sort-btn" onClick={() => setSortDir(prev => prev === "asc" ? "desc" : "asc") }>
+                <button type="button" className="hp-sort-btn" onClick={() => setSortDir(prev => prev === "asc" ? "desc" : "asc") }>
                   <i className={`fas ${sortDir === "asc" ? "fa-arrow-down-1-9" : "fa-arrow-down-9-1"}`}></i>
                   <span>
                     {sortDir === "asc"
