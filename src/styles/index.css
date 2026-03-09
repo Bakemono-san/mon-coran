@@ -498,19 +498,19 @@
     --glass-backdrop: blur(16px) saturate(180%);
     --glass-dark-backdrop: blur(20px) saturate(180%) brightness(0.95);
 
-    --bg: var(--parchment-1);
-    --bg-primary: var(--parchment-1);
-    --bg-secondary: var(--parchment-2);
-    --bg-tertiary: var(--parchment-3);
+    --bg: #ffffff;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafb;
+    --bg-tertiary: #f1f4f5;
     --bg-card: #ffffff;
     --bg-overlay: rgba(28, 25, 23, 0.55);
     --surface: #ffffff;
 
-    --border: rgba(201, 186, 148, 0.45);
-    --border-light: rgba(201, 186, 148, 0.25);
-    --border-subtle: rgba(201, 186, 148, 0.18);
-    --border-strong: rgba(201, 186, 148, 0.7);
-    --divider: rgba(201, 186, 148, 0.3);
+    --border: #e5e7eb;
+    --border-light: #f3f4f6;
+    --border-subtle: #f3f4f6;
+    --border-strong: #d1d5db;
+    --divider: #e5e7eb;
 
     --text-primary: var(--ink-1);
     --text-secondary: var(--ink-2);
@@ -8026,7 +8026,7 @@ button,
 
 /* Primary button */
 .btn-primary,
-button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):not(.quran-com-card):not(.hp-quick-card):not(.qc-play-btn):not(.qc-continue-btn) {
+button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon) {
     background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 100%);
     color: white;
     box-shadow: var(--shadow-emerald);
@@ -8034,13 +8034,13 @@ button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):n
 }
 
 .btn-primary:hover,
-button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):not(.quran-com-card):not(.hp-quick-card):not(.qc-play-btn):not(.qc-continue-btn):hover {
+button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(44, 164, 171, 0.3);
 }
 
 .btn-primary:active,
-button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):not(.quran-com-card):not(.hp-quick-card):not(.qc-play-btn):not(.qc-continue-btn):active {
+button:not([type="button"]):not(.btn-secondary):not(.btn-ghost):not(.btn-icon):active {
     transform: translateY(0);
 }
 
@@ -8394,12 +8394,12 @@ input:focus-visible {
 }
 
 .hp-quick-card--duas {
-    border-color: var(--gold-border);
+    border-color: rgba(44, 164, 171, 0.25);
 }
 
 .hp-quick-card--duas:hover {
-    border-color: var(--gold);
-    background: var(--gold-light);
+    border-color: var(--primary);
+    background: var(--primary-light);
 }
 
 .hp-quick-icon {
