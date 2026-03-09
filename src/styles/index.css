@@ -273,24 +273,24 @@
     --parchment-3: #ede3cc;
     --parchment-4: #e0d5bb;
 
-    /* ── Islamic Green (Primary) ── */
-    --emerald: #1b5e3b;
+    /* ── Islamic Teal (Primary — quran.com v5 palette) ── */
+    --emerald: #2ca4ab;
     --reading-surface-soft: rgba(255, 255, 255, 0.68);
     --reading-surface-elevated: rgba(255, 255, 255, 0.82);
-    --player-border: rgba(192, 154, 74, 0.18);
-    --player-panel-bg: rgba(12, 18, 14, 0.08);
-    --player-chip-bg: rgba(192, 154, 74, 0.12);
-    --player-chip-border: rgba(192, 154, 74, 0.22);
-    --player-chip-text: #8f6e20;
-    --player-text-strong: rgba(31, 26, 14, 0.92);
-    --player-text-soft: rgba(116, 92, 33, 0.78);
-    --player-accent: #1b5e3b;
-    --player-accent-strong: #2b7a54;
-    --player-accent-deep: #143f2b;
-    --emerald-mid: #236b47;
-    --emerald-lit: #2d8a5a;
-    --emerald-pale: #e8f2ec;
-    --emerald-tint: rgba(27, 94, 59, 0.08);
+    --player-border: rgba(44, 164, 171, 0.18);
+    --player-panel-bg: rgba(0, 80, 86, 0.06);
+    --player-chip-bg: rgba(44, 164, 171, 0.12);
+    --player-chip-border: rgba(44, 164, 171, 0.22);
+    --player-chip-text: #1a7a7f;
+    --player-text-strong: rgba(10, 30, 32, 0.92);
+    --player-text-soft: rgba(22, 100, 106, 0.78);
+    --player-accent: #2ca4ab;
+    --player-accent-strong: #34bfc8;
+    --player-accent-deep: #1a7a7f;
+    --emerald-mid: #28adb5;
+    --emerald-lit: #34bfc8;
+    --emerald-pale: #ebf9fa;
+    --emerald-tint: rgba(44, 164, 171, 0.08);
 
     /* ── Gold (Accent) ── */
     --gold: #b8860b;
@@ -299,7 +299,7 @@
     --gold-tint: rgba(184, 134, 11, 0.12);
 
     /* ── Semantic ── */
-    --color-success: #1b5e3b;
+    --color-success: #2ca4ab;
     --color-warning: #b8860b;
     --color-error: #b91c1c;
     --color-info: #1d4ed8;
@@ -311,8 +311,8 @@
     --shadow-lg: 0 8px 24px rgba(28, 25, 23, 0.1), 0 4px 8px rgba(28, 25, 23, 0.06), 0 0 0 1px rgba(28, 25, 23, 0.06);
     --shadow-xl: 0 16px 48px rgba(28, 25, 23, 0.12), 0 8px 16px rgba(28, 25, 23, 0.08), 0 0 0 1px rgba(28, 25, 23, 0.07);
     --shadow-gold: 0 4px 12px rgba(184, 134, 11, 0.15), 0 0 0 1px rgba(184, 134, 11, 0.2);
-    --shadow-emerald: 0 4px 12px rgba(27, 94, 59, 0.15), 0 0 0 1px rgba(27, 94, 59, 0.2);
-    --shadow-glow: 0 0 24px rgba(27, 94, 59, 0.2), 0 0 0 1px rgba(27, 94, 59, 0.1);
+    --shadow-emerald: 0 4px 12px rgba(44, 164, 171, 0.15), 0 0 0 1px rgba(44, 164, 171, 0.2);
+    --shadow-glow: 0 0 24px rgba(44, 164, 171, 0.2), 0 0 0 1px rgba(44, 164, 171, 0.1);
 
     /* ── Header & Navigation ── */
     --header-bg: #ffffff;
@@ -320,25 +320,25 @@
     --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
     --sidebar-bg: var(--parchment-1);
-    --player-bg: linear-gradient(160deg, #0e3d26 0%, #1b5e3b 100%);
+    --player-bg: linear-gradient(160deg, #0d4a4e 0%, #1a7a7f 100%);
     --player-glass: linear-gradient(120deg,
-            #0f2d21 0%,
-            #163b2c 50%,
-            #0d261d 100%);
+            #0d3a3e 0%,
+            #163f44 50%,
+            #0c2e32 100%);
 
     /* ── Quran text ── */
     --text-quran: #1c1917;
     --mushaf-bg: #fdfaf4;
     --mushaf-border: #c9ba94;
-    --ayah-hover: rgba(27, 94, 59, 0.04);
-    --ayah-playing-bg: rgba(184, 134, 11, 0.07);
+    --ayah-hover: rgba(44, 164, 171, 0.04);
+    --ayah-playing-bg: rgba(44, 164, 171, 0.07);
     --bismillah-color: var(--emerald);
 
     /* ── Surah header ── */
     --surah-header-bg: linear-gradient(135deg,
-            #0e3d26 0%,
-            #1b5e3b 60%,
-            #1a6040 100%);
+            #0d4a4e 0%,
+            #1a7a7f 60%,
+            #1c8589 100%);
 
     /* ── Couleurs Tajweed — Palette exacte quranwbw.com ──
      * Vert    #169200  → Ghunna / Idgham bighunna
@@ -390,7 +390,7 @@
     /* Idgham Warsh — vert moyen */
 
     /* ── Scrollbar ── */
-    --scrollbar-thumb: rgba(27, 94, 59, 0.25);
+    --scrollbar-thumb: rgba(44, 164, 171, 0.25);
     --scrollbar-track: transparent;
 
     /* ── Fonts ── */
@@ -406,10 +406,10 @@
         "Scheherazade New", "Noto Naskh Arabic",
         "Amiri Quran", serif;
     --font-ui:
-        "Cairo", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Figtree", "Cairo", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
     --font-home-ui:
-        "Manrope", "Cairo", "Inter", -apple-system, BlinkMacSystemFont,
+        "Figtree", "Manrope", "Cairo", "Inter", -apple-system, BlinkMacSystemFont,
         "Segoe UI", sans-serif;
     --font-home-ar:
         "Scheherazade New", "Amiri Quran", "Amiri", "Noto Naskh Arabic",
@@ -428,7 +428,7 @@
     --surface-active: rgba(var(--primary-rgb), 0.09);
     --surface-border: rgba(var(--primary-rgb), 0.09);
     --surface-overlay: rgba(18, 21, 19, 0.44);
-    --icon-muted: rgba(27, 94, 59, 0.72);
+    --icon-muted: rgba(44, 164, 171, 0.72);
     --line-height-quran: 2.6;
 
     /* ── Layout ── */
@@ -469,17 +469,17 @@
 
     /* ── Aliases used across all components ── */
     --primary: var(--emerald);
-    --primary-dark: #0e3d26;
+    --primary-dark: #1a7a7f;
     --primary-light: var(--emerald-pale);
-    --primary-rgb: 27, 94, 59;
+    --primary-rgb: 44, 164, 171;
 
     --accent: var(--emerald);
     --accent-light: var(--emerald-pale);
-    --accent-dark: #0e3d26;
+    --accent-dark: #1a7a7f;
 
     --color-emerald: var(--emerald);
     --color-emerald-light: var(--emerald-pale);
-    --color-emerald-dark: #0e3d26;
+    --color-emerald-dark: #1a7a7f;
     --color-gold: var(--gold);
     --color-gold-light: var(--gold-pale);
     --color-gold-dark: #8a6008;
@@ -524,10 +524,10 @@
     --primary-on-muted: rgba(255, 255, 255, 0.7);
     --primary-on-alpha: rgba(255, 255, 255, 0.08);
 
-    --hover-bg: rgba(27, 94, 59, 0.05);
-    --active-bg: rgba(27, 94, 59, 0.1);
-    --highlight-bg: rgba(184, 134, 11, 0.08);
-    --focus-ring: 0 0 0 3px rgba(27, 94, 59, 0.22);
+    --hover-bg: rgba(44, 164, 171, 0.05);
+    --active-bg: rgba(44, 164, 171, 0.1);
+    --highlight-bg: rgba(44, 164, 171, 0.08);
+    --focus-ring: 0 0 0 3px rgba(44, 164, 171, 0.22);
 
     /* Radius aliases */
     --radius: var(--r-md);
@@ -4747,25 +4747,22 @@ select,
 .qc-hero {
     position: relative;
     overflow: hidden;
-    /* Dégradé vert émeraude fixe — visible sur tous les thèmes */
-    background: linear-gradient(160deg,
-            #0e3d26 0%,
-            #1b5e3b 55%,
-            var(--primary, #1b5e3b) 100%);
+    /* Fond clair quran.com — background gris neutre avec dégradé doux */
+    background: linear-gradient(180deg, #e9ecef 0%, #f4f5f6 60%, #ffffff 100%);
     padding: 4.5rem 2rem 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid #e5e7eb;
 }
 
-/* Motif géométrique islamique en filigrane */
+/* Motif géométrique islamique en filigrane — adapté pour fond clair */
 .qc-hero::before {
     content: '';
     position: absolute;
     inset: 0;
     background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpolygon points='40,5 50,25 72,18 62,38 75,55 53,50 48,72 35,56 13,63 20,42 5,28 27,26' fill='none' stroke='rgba(255%2C255%2C255%2C0.05)' stroke-width='1'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpolygon points='40,5 50,25 72,18 62,38 75,55 53,50 48,72 35,56 13,63 20,42 5,28 27,26' fill='none' stroke='rgba(44%2C164%2C171%2C0.08)' stroke-width='1'/%3E%3C/svg%3E");
     background-size: 80px 80px;
     pointer-events: none;
 }
@@ -4780,7 +4777,7 @@ select,
     width: 500px;
     height: 160px;
     background: radial-gradient(ellipse at center,
-            rgba(184, 134, 11, 0.12) 0%,
+            rgba(44, 164, 171, 0.1) 0%,
             transparent 70%);
     pointer-events: none;
 }
@@ -4793,14 +4790,14 @@ select,
     text-align: center;
 }
 
-/* Nom de l'application — blanc sur fond sombre */
+/* Nom de l'application — sombre sur fond clair (quran.com style) */
 .qc-site-name {
     font-size: clamp(1.9rem, 4vw, 2.8rem);
     font-weight: 800;
-    color: #fff;
+    color: #272727;
     margin-bottom: 0.35rem;
     letter-spacing: -0.02em;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+    text-shadow: none;
     font-family: var(--font-ui);
 }
 
@@ -4810,7 +4807,7 @@ select,
     content: '﷽';
     font-family: var(--font-quran), serif;
     font-size: 1.9rem;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(44, 164, 171, 0.7);
     margin-bottom: 1.25rem;
     letter-spacing: 2px;
 }
@@ -4836,13 +4833,13 @@ select,
     width: 100%;
     padding: 1rem 1.25rem 1rem 3.25rem;
     font-size: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid #e5e7eb;
     border-radius: var(--r-pill);
-    background: rgba(255, 255, 255, 0.97);
+    background: #ffffff;
     color: var(--text);
     box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.18),
-        0 2px 8px rgba(0, 0, 0, 0.1);
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        0 1px 4px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.2s, border-color 0.2s;
     font-family: var(--font-ui);
 }
@@ -4853,10 +4850,10 @@ select,
 
 .qc-hero-search:focus {
     outline: none;
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: #2ca4ab;
     box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.22),
-        0 0 0 3px rgba(255, 255, 255, 0.15);
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        0 0 0 3px rgba(44, 164, 171, 0.18);
 }
 
 /* Boutons de raccourci dans le hero */
@@ -4870,20 +4867,19 @@ select,
 .qc-quick-link {
     padding: 0.38rem 1rem;
     border-radius: var(--r-pill);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
     font-size: 0.78rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.88);
+    color: #495057;
     transition: all 0.15s;
-    backdrop-filter: blur(4px);
     cursor: pointer;
 }
 
 .qc-quick-link:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.22);
-    color: #fff;
+    border-color: #2ca4ab;
+    background: #ebf9fa;
+    color: #2ca4ab;
     transform: translateY(-1px);
 }
 
@@ -9410,13 +9406,11 @@ input:focus-visible {
 
     0%,
     100% {
-        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+        color: #272727;
     }
 
     50% {
-        text-shadow:
-            0 2px 32px rgba(212, 168, 32, 0.4),
-            0 0 60px rgba(255, 255, 255, 0.12);
+        color: #1a7a7f;
     }
 }
 
@@ -9472,7 +9466,7 @@ input:focus-visible {
     /* New position: top right */
     top: -80px;
     right: -70px;
-    background: radial-gradient(circle, rgba(212, 168, 32, 0.09) 0%, transparent 68%);
+    background: radial-gradient(circle, rgba(44, 164, 171, 0.12) 0%, transparent 68%);
     pointer-events: none;
     animation: orbFloat 9s ease-in-out infinite;
     z-index: 0;
@@ -9485,18 +9479,17 @@ input:focus-visible {
     gap: 0.55rem;
     margin-bottom: 1rem;
     padding: 0.55rem 1.2rem 0.55rem 0.85rem;
-    background: linear-gradient(135deg, rgba(212, 168, 32, 0.95), rgba(184, 134, 11, 0.9));
-    color: #0a1f0d;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #2ca4ab;
+    color: #ffffff;
+    border: 1px solid rgba(44, 164, 171, 0.2);
     border-radius: var(--r-pill);
     font-family: var(--font-ui);
     font-size: 0.82rem;
     font-weight: 700;
     cursor: pointer;
     box-shadow:
-        0 4px 20px rgba(184, 134, 11, 0.45),
-        0 1px 4px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        0 4px 16px rgba(44, 164, 171, 0.35),
+        0 1px 4px rgba(0, 0, 0, 0.1);
     transition:
         transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
         box-shadow 0.18s;
@@ -9508,8 +9501,8 @@ input:focus-visible {
 .qc-continue-btn:hover {
     transform: translateY(-2px) scale(1.03);
     box-shadow:
-        0 8px 28px rgba(184, 134, 11, 0.55),
-        0 2px 8px rgba(0, 0, 0, 0.2);
+        0 8px 24px rgba(44, 164, 171, 0.45),
+        0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .qc-continue-btn:active {
@@ -9529,10 +9522,10 @@ input:focus-visible {
     font-family: var(--font-quran), serif;
     font-size: 1rem;
     direction: rtl;
-    background: rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.2);
     padding: 0.08rem 0.6rem;
     border-radius: var(--r-sm);
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     letter-spacing: 0.5px;
 }
 
@@ -9540,11 +9533,10 @@ input:focus-visible {
 .qc-vdj {
     margin-top: 1.5rem;
     padding: 0.9rem 1.5rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.11);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: var(--r-xl);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     max-width: 600px;
     width: 100%;
     display: flex;
@@ -9559,7 +9551,7 @@ input:focus-visible {
 .qc-vdj-text {
     font-family: var(--font-quran), serif;
     font-size: 1.4rem;
-    color: rgba(255, 255, 255, 0.92);
+    color: #272727;
     direction: rtl;
     text-align: center;
     line-height: 2;
@@ -9570,7 +9562,7 @@ input:focus-visible {
     font-family: var(--font-ui);
     font-size: 0.67rem;
     letter-spacing: 0.09em;
-    color: rgba(255, 255, 255, 0.44);
+    color: #9ca3af;
     text-transform: uppercase;
 }
 
@@ -9601,14 +9593,14 @@ input:focus-visible {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 14px 24px rgba(9, 15, 11, 0.28));
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
 }
 
 /* ── Slogan ── */
 .qc-slogan {
     font-family: var(--font-ui);
     font-size: clamp(0.78rem, 1.8vw, 0.93rem);
-    color: rgba(255, 255, 255, 0.62);
+    color: #6b7280;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 1.75rem;
@@ -9633,7 +9625,7 @@ input:focus-visible {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(245, 215, 100, 0.88);
+    color: #2ca4ab;
 }
 
 .qc-vdj-badge i {
@@ -9645,7 +9637,7 @@ input:focus-visible {
     font-family: var(--font-ui);
     font-size: 0.6rem;
     letter-spacing: 0.07em;
-    color: rgba(255, 255, 255, 0.35);
+    color: #9ca3af;
     text-transform: capitalize;
 }
 
@@ -9654,7 +9646,7 @@ input:focus-visible {
     font-family: var(--font-ui);
     font-size: 0.78rem;
     font-style: italic;
-    color: rgba(255, 255, 255, 0.52);
+    color: #6b7280;
     text-align: center;
     line-height: 1.5;
     padding: 0 0.5rem;
@@ -9884,31 +9876,32 @@ input:focus-visible {
 }
 
 .qc-slogan {
-    color: rgba(255, 255, 255, 0.72);
+    color: #6b7280;
     letter-spacing: 0.09em;
 }
 
 .qc-continue-btn {
-    background: linear-gradient(135deg, var(--gold) 0%, color-mix(in srgb, var(--gold) 82%, #fff 18%) 100%);
+    background: #2ca4ab;
+    color: #ffffff;
     box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        0 4px 16px rgba(44, 164, 171, 0.3),
+        0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .qc-vdj {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.14);
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .qc-vdj-badge {
-    color: rgba(255, 240, 189, 0.92);
+    color: #2ca4ab;
 }
 
 .qc-vdj-date,
 .qc-vdj-ref,
 .qc-vdj-trans {
-    color: rgba(255, 255, 255, 0.6);
+    color: #9ca3af;
 }
 
 .hp-panel,
@@ -10219,6 +10212,50 @@ input:focus-visible {
             #0a2212 100%);
 }
 
+[data-theme="dark"] .qc-site-name {
+    color: #ffffff;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .qc-slogan {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .qc-vdj {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+}
+
+[data-theme="dark"] .qc-vdj-text {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .qc-vdj-ref,
+[data-theme="dark"] .qc-vdj-date {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .qc-vdj-badge {
+    color: rgba(44, 200, 215, 0.88);
+}
+
+[data-theme="dark"] .qc-vdj-trans {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .qc-hero-pill {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.88);
+}
+
+[data-theme="dark"] .qc-hero-pill--riwaya {
+    background: rgba(44, 164, 171, 0.2);
+    color: rgba(44, 220, 230, 0.95);
+    border-color: rgba(44, 164, 171, 0.3);
+}
+
 [data-theme="sepia"] .qc-hero {
     background: linear-gradient(160deg,
             #2a1200 0%,
@@ -10324,12 +10361,9 @@ input:focus-visible {
     margin: 1rem auto 0;
     padding: 2.55rem clamp(1rem, 3vw, 2rem) 1.8rem;
     border-radius: 2rem;
-    border: 1px solid rgba(var(--primary-rgb), 0.16);
-    background:
-        linear-gradient(140deg, var(--primary-dark) 0%, rgba(var(--primary-rgb), 0.92) 55%, rgba(184, 134, 11, 0.28) 100%);
-    box-shadow:
-        0 22px 60px rgba(19, 23, 20, 0.14),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border: 1px solid #e5e7eb;
+    background: linear-gradient(180deg, #e9ecef 0%, #f4f5f6 60%, #ffffff 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .qc-hero::before {
@@ -10337,11 +10371,11 @@ input:focus-visible {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(120deg, rgba(255, 255, 255, 0.06), transparent 34%),
-        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.08) 0%, transparent 20%),
-        repeating-linear-gradient(150deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 42px);
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpolygon points='40,5 50,25 72,18 62,38 75,55 53,50 48,72 35,56 13,63 20,42 5,28 27,26' fill='none' stroke='rgba(44%2C164%2C171%2C0.07)' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 80px 80px;
     opacity: 0.9;
     pointer-events: none;
+    border-radius: 2rem;
 }
 
 .qc-hero::after {
@@ -10349,8 +10383,8 @@ input:focus-visible {
     height: 300px;
     top: -84px;
     right: -56px;
-    opacity: 0.82;
-    background: radial-gradient(circle, rgba(255, 244, 206, 0.16) 0%, rgba(212, 168, 32, 0.12) 24%, transparent 72%);
+    opacity: 0.6;
+    background: radial-gradient(circle, rgba(44, 164, 171, 0.1) 0%, rgba(44, 164, 171, 0.06) 24%, transparent 72%);
 }
 
 .qc-hero-inner {
@@ -10409,24 +10443,25 @@ input:focus-visible {
     min-height: 2rem;
     padding: 0.38rem 0.78rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.11);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #495057;
     font-family: var(--font-home-ui, var(--font-ui));
     font-size: 0.72rem;
     font-weight: 700;
 }
 
 .qc-hero-pill--riwaya {
-    background: rgba(255, 244, 206, 0.12);
-    color: rgba(255, 247, 232, 0.96);
+    background: #ebf9fa;
+    color: #2ca4ab;
+    border-color: rgba(44, 164, 171, 0.25);
 }
 
 .qc-search-container {
     max-width: 620px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .qc-hero-search {
@@ -10442,16 +10477,17 @@ input:focus-visible {
 .qc-quick-link {
     padding: 0.56rem 0.92rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     font-size: 0.73rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.88);
+    color: #495057;
 }
 
 .qc-quick-link:hover {
-    background: rgba(255, 255, 255, 0.16);
-    border-color: rgba(255, 255, 255, 0.18);
+    background: #ebf9fa;
+    border-color: rgba(44, 164, 171, 0.3);
+    color: #2ca4ab;
 }
 
 .qc-vdj {
@@ -10459,9 +10495,9 @@ input:focus-visible {
     align-items: flex-start;
     text-align: start;
     padding: 1rem 1.15rem;
-    background: rgba(7, 13, 10, 0.18);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 18px 42px rgba(9, 15, 11, 0.16);
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .qc-vdj-header {
@@ -10666,10 +10702,9 @@ input:focus-visible {
     min-height: 104px;
     padding: 0.85rem 0.95rem;
     border-radius: 1.5rem;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 244, 232, 0.98) 100%);
-    border-color: rgba(184, 134, 11, 0.08);
-    box-shadow: 0 10px 22px rgba(15, 20, 17, 0.04);
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .quran-com-card--grid::after {
@@ -10680,7 +10715,7 @@ input:focus-visible {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(184, 134, 11, 0.08) 0%, transparent 68%);
+    background: radial-gradient(circle, rgba(44, 164, 171, 0.08) 0%, transparent 68%);
     pointer-events: none;
 }
 
@@ -10702,12 +10737,12 @@ input:focus-visible {
 .quran-com-card--grid .qc-details {
     font-size: 0.58rem;
     letter-spacing: 0.01em;
-    color: color-mix(in srgb, var(--text-muted) 84%, #8a6d2f 16%);
+    color: var(--text-muted);
 }
 
 .quran-com-card--grid .qc-card-right {
     padding-top: 0.52rem;
-    border-top-color: rgba(184, 134, 11, 0.08);
+    border-top-color: rgba(44, 164, 171, 0.08);
 }
 
 .quran-com-card--grid .qc-ar {
@@ -10719,13 +10754,13 @@ input:focus-visible {
 .quran-com-card--grid .qc-play-btn {
     width: 28px;
     height: 28px;
-    background: rgba(184, 134, 11, 0.08);
-    border-color: rgba(184, 134, 11, 0.18);
-    color: color-mix(in srgb, var(--primary) 72%, #7a5a16 28%);
+    background: rgba(44, 164, 171, 0.08);
+    border-color: rgba(44, 164, 171, 0.18);
+    color: var(--primary);
 }
 
 .quran-com-card--grid:hover .qc-play-btn {
-    background: rgba(184, 134, 11, 0.14);
+    background: rgba(44, 164, 171, 0.14);
 }
 
 [data-theme="dark"] .hp-page,

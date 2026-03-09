@@ -42,10 +42,10 @@
 
 @keyframes pulseGlow {
     0%, 100% {
-        box-shadow: 0 0 12px rgba(27, 94, 59, 0.2);
+        box-shadow: 0 0 12px rgba(44, 164, 171, 0.2);
     }
     50% {
-        box-shadow: 0 0 20px rgba(27, 94, 59, 0.35);
+        box-shadow: 0 0 20px rgba(44, 164, 171, 0.35);
     }
 }
 
@@ -102,7 +102,7 @@
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: rgba(27, 94, 59, 0.1);
+    background: rgba(44, 164, 171, 0.1);
     transform: translate(-50%, -50%);
     transition: width var(--t-mid), height var(--t-mid);
 }
@@ -201,7 +201,7 @@
     position: absolute;
     inset: -4px;
     border-radius: inherit;
-    background: radial-gradient(circle, rgba(27, 94, 59, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(44, 164, 171, 0.2) 0%, transparent 70%);
     animation: pulseGlow 2s ease-in-out infinite;
     pointer-events: none;
 }
@@ -238,7 +238,7 @@ button::after, [role="button"]::after {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(27, 94, 59, 0.25);
+    box-shadow: 0 8px 20px rgba(44, 164, 171, 0.25);
 }
 
 .btn-primary:active {
@@ -330,7 +330,7 @@ button::after, [role="button"]::after {
 .spinner {
     width: 24px;
     height: 24px;
-    border: 2px solid rgba(27, 94, 59, 0.1);
+    border: 2px solid rgba(44, 164, 171, 0.1);
     border-top-color: var(--emerald);
     border-radius: 50%;
     animation: spin-smooth 0.8s linear infinite;
@@ -347,7 +347,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
     border-color: var(--emerald);
-    box-shadow: 0 0 0 3px rgba(27, 94, 59, 0.1);
+    box-shadow: 0 0 0 3px rgba(44, 164, 171, 0.1);
     outline: none;
 }
 
@@ -378,7 +378,7 @@ input:focus::placeholder {
 }
 
 .dropdown-item:hover {
-    background: rgba(27, 94, 59, 0.08);
+    background: rgba(44, 164, 171, 0.08);
     padding-left: 16px;
 }
 
@@ -392,7 +392,7 @@ input:focus::placeholder {
 
 .badge-primary {
     background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 100%);
-    box-shadow: 0 2px 8px rgba(27, 94, 59, 0.2);
+    box-shadow: 0 2px 8px rgba(44, 164, 171, 0.2);
 }
 
 .badge-accent {
@@ -455,5 +455,5 @@ input:focus::placeholder {
 }
 
 [data-theme="dark"] .dropdown-item:hover {
-    background: rgba(27, 94, 59, 0.2);
+    background: rgba(44, 164, 171, 0.2);
 }

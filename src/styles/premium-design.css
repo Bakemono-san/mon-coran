@@ -122,7 +122,7 @@ select:focus-visible,
    4. PREMIUM HEADER DESIGN
    ══════════════════════════════════════ */
 .app-header {
-  background: linear-gradient(135deg, #0D5C4A 0%, #0A4A3A 60%, #083828 100%);
+  background: linear-gradient(135deg, #2ca4ab 0%, #248b91 60%, #1a7a7f 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--ui-shadow-lg), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
   backdrop-filter: blur(24px) saturate(180%);
@@ -375,7 +375,7 @@ select:focus-visible,
 }
 
 .display-mode-bar {
-  background: linear-gradient(135deg, #0D5C4A 0%, #0A4A3A 100%);
+  background: linear-gradient(135deg, #2ca4ab 0%, #248b91 100%);
   border-radius: 0 0 var(--ui-radius-lg) var(--ui-radius-lg);
   margin: -1rem calc(-1 * var(--ui-space-5)) var(--ui-space-4);
   padding: 0.65rem var(--ui-space-4);
@@ -444,7 +444,7 @@ select:focus-visible,
   border-radius: var(--ui-radius-xl);
   overflow: hidden;
   box-shadow: var(--ui-shadow-lg);
-  background: linear-gradient(135deg, #0D5C4A 0%, #083828 100%);
+  background: linear-gradient(135deg, #2ca4ab 0%, #1a7a7f 100%);
 }
 
 .surah-header-inner {
@@ -497,7 +497,7 @@ select:focus-visible,
    7. PREMIUM AUDIO PLAYER
    ══════════════════════════════════════ */
 .audio-player {
-  background: linear-gradient(135deg, #0D5C4A 0%, #0A4A3A 60%, #083828 100%);
+  background: linear-gradient(135deg, #2ca4ab 0%, #248b91 60%, #1a7a7f 100%);
   border-radius: var(--ui-radius-xl) var(--ui-radius-xl) 0 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.15);
@@ -555,7 +555,7 @@ select:focus-visible,
   height: 52px;
   border-radius: 50%;
   background: white;
-  color: #0D5C4A;
+  color: #2ca4ab;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition: all var(--ui-transition-fast);
 }

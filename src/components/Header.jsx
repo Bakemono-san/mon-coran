@@ -301,7 +301,7 @@ export default function Header() {
   return (
     <header className="flex flex-col z-[100] relative select-none w-full border-b border-[var(--border)] bg-[#FDFCFB] dark:bg-[var(--bg-primary)] transition-colors duration-300">
       {/* Top Banner */}
-      <div className="bg-[#0E8A5E] text-white text-[0.65rem] sm:text-[0.75rem] py-[5px] sm:py-1.5 flex flex-wrap items-center justify-center gap-1 sm:gap-2 font-medium w-full px-4 text-center">
+      <div className="bg-[#2ca4ab] text-white text-[0.65rem] sm:text-[0.75rem] py-[5px] sm:py-1.5 flex flex-wrap items-center justify-center gap-1 sm:gap-2 font-medium w-full px-4 text-center">
         <span>{lang === 'fr' ? "C'est le mois du Coran. Aidez-nous à diffuser sa lumière." : lang === 'ar' ? "إنه شهر القرآن. ساهم في نشر نوره." : "It's the month of the Quran. Help us spread its light."}</span>
         <button className="bg-white/20 hover:bg-white/30 text-white rounded-full px-2 sm:px-2.5 py-0.5 transition-colors font-bold flex items-center gap-1 ml-1 cursor-pointer">
           <i className="fas fa-sparkles text-[0.6rem]" /> {lang === 'fr' ? "Faire un don" : lang === 'ar' ? "تبرع" : "Donate"}
@@ -330,15 +330,15 @@ export default function Header() {
               <button
                 onClick={isRtl ? handleNext : handlePrev}
                 disabled={isRtl ? !canGoNext : !canGoPrev}
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[#0E8A5E] disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer transition-colors"
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[#2ca4ab] disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer transition-colors"
               >
                 <i className="fas fa-chevron-left text-[0.65rem]" />
               </button>
 
               <Popover open={goToOpen} onOpenChange={setGoToOpen}>
                 <PopoverTrigger asChild>
-                  <button className="flex flex-col items-center justify-center px-4 py-1 rounded-full hover:bg-[var(--bg-secondary)] transition-all min-w-[130px] group border border-transparent hover:border-[#0E8A5E]/20 cursor-pointer">
-                    <span className="text-[0.9rem] font-bold text-[var(--text)] group-hover:text-[#0E8A5E] truncate transition-colors" style={{ fontFamily: "var(--font-ui)" }}>{centerTitle}</span>
+                  <button className="flex flex-col items-center justify-center px-4 py-1 rounded-full hover:bg-[var(--bg-secondary)] transition-all min-w-[130px] group border border-transparent hover:border-[#2ca4ab]/20 cursor-pointer">
+                    <span className="text-[0.9rem] font-bold text-[var(--text)] group-hover:text-[#2ca4ab] truncate transition-colors" style={{ fontFamily: "var(--font-ui)" }}>{centerTitle}</span>
                     <span className="text-[0.6rem] text-[var(--text-muted)] opacity-70 group-hover:opacity-100 flex gap-1 transition-opacity">
                       {displayMode === "surah" ? (
                         <><span>{lang === "ar" ? toAr(currentSurah) : `#${currentSurah}`}</span><span className="opacity-30">·</span><span>{ayahCount}</span></>
@@ -354,8 +354,8 @@ export default function Header() {
                   <form onSubmit={handleGoTo} className="flex flex-col gap-4 p-4">
                     <label className="text-[0.65rem] font-bold uppercase tracking-wider text-[var(--text-muted)] ml-1">{goToLabel}</label>
                     <div className="flex gap-2">
-                      <Input ref={inputRef} type="number" min={1} max={goToMax} value={goToValue} onChange={(e) => setGoToValue(e.target.value)} placeholder="#" className="flex-1 text-center h-10 rounded-xl border-[var(--border)] focus:ring-[#0E8A5E]/30" />
-                      <Button type="submit" className="px-5 h-10 rounded-xl bg-[#0E8A5E] hover:bg-[#0c7c54] text-white transition-colors cursor-pointer"><i className="fas fa-arrow-right" /></Button>
+                      <Input ref={inputRef} type="number" min={1} max={goToMax} value={goToValue} onChange={(e) => setGoToValue(e.target.value)} placeholder="#" className="flex-1 text-center h-10 rounded-xl border-[var(--border)] focus:ring-[#2ca4ab]/30" />
+                      <Button type="submit" className="px-5 h-10 rounded-xl bg-[#2ca4ab] hover:bg-[#248b91] text-white transition-colors cursor-pointer"><i className="fas fa-arrow-right" /></Button>
                     </div>
                   </form>
                 </PopoverContent>
@@ -365,7 +365,7 @@ export default function Header() {
               <button
                 onClick={isRtl ? handlePrev : handleNext}
                 disabled={isRtl ? !canGoNext : !canGoNext}
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[#0E8A5E] disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer transition-colors"
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[#2ca4ab] disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer transition-colors"
               >
                 <i className="fas fa-chevron-right text-[0.65rem]" />
               </button>
