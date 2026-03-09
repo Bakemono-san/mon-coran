@@ -1199,6 +1199,8 @@ export default function QuranDisplay() {
               showTajwid={showTajwid}
               currentPlayingAyah={currentPlayingAyah}
               surahNum={currentSurah}
+              calibration={karaokeCalibration}
+              riwaya={riwaya}
             />
           )}
 
@@ -1504,6 +1506,8 @@ export default function QuranDisplay() {
               showTajwid={showTajwid}
               currentPlayingAyah={currentPlayingAyah}
               surahNum={surahGroups[0]?.surah}
+              calibration={karaokeCalibration}
+              riwaya={riwaya}
             />
           )}
 
@@ -1712,6 +1716,8 @@ export default function QuranDisplay() {
               showTajwid={showTajwid}
               currentPlayingAyah={currentPlayingAyah}
               surahNum={surahGroups[0]?.surah}
+              calibration={karaokeCalibration}
+              riwaya={riwaya}
             />
           )}
 

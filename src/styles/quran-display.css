@@ -3753,3 +3753,40 @@
         margin-bottom: 1rem;
     }
 }
+
+/* Page separator for long surahs */
+.clean-page-separator {
+    margin: 2rem 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--border, rgba(var(--primary-rgb), 0.2)),
+        transparent
+    );
+    opacity: 0.4;
+}
+
+/* Ayah wrapper in clean page view */
+.clean-ayah {
+    display: inline;
+}
+
+.clean-ayah.clean-ayah-playing {
+    color: var(--gold, #d4a820);
+    text-shadow: 0 0 8px rgba(212, 168, 32, 0.3);
+}
+
+/* Ensure clean-verse-marker displays inline */
+.clean-verse-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 0.25em;
+    vertical-align: middle;
+    font-size: 0.5em;
+    color: var(--primary);
+    transform: translateY(-0.05em);
+    user-select: none;
+}

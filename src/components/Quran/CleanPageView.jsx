@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { toAr } from "../../data/surahs";
+import SmartAyahRenderer from "./SmartAyahRenderer";
 
 /**
  * Circular verse marker badge (like quran.com)
@@ -40,8 +41,15 @@ function VerseMarker({ num, lang }) {
 }
 
 /**
+ * Page separator for long surahs
+ */
+function PageSeparator() {
+  return <div className="clean-page-separator" />;
+}
+
+/**
  * CleanPageView - Quran.com-style centered flowing text layout
- * Pure, minimal design with inline verse markers
+ * Displays all ayahs with tajweed coloring and page separators
  */
 export default function CleanPageView({
   ayahs,
@@ -51,6 +59,8 @@ export default function CleanPageView({
   showTajwid,
   currentPlayingAyah,
   surahNum,
+  calibration,
+  riwaya,
 }) {
   // Check if we should show basmala
   const showBasmala = useMemo(() => {
@@ -64,88 +74,93 @@ export default function CleanPageView({
 
   const basmalaText = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
 
-  // Group words by their text representation for rendering
-  const renderContent = useMemo(() => {
-    const elements = [];
+  // Group ayahs by page (estimate based on typical page structure)
+  // Pages typically have 15-16 ayahs, but we'll use a dynamic approach
+  const ayahsByPage = useMemo(() => {
+    if (!ayahs || ayahs.length === 0) return [];
 
-    // Add basmala if needed
-    if (showBasmala) {
-      elements.push(
-        <div key="basmala" className="clean-basmala">
-          {basmalaText}
-        </div>
-      );
-    }
+    const pages = [];
+    let currentPage = [];
+    let lineCount = 0;
+    const targetLinesPerPage = 15; // Typical page has ~15 lines
 
-    // For each ayah, render its text with verse marker at the end
-    ayahs.forEach((ayah, idx) => {
-      const isPlaying =
-        currentPlayingAyah?.ayah === ayah.numberInSurah &&
-        currentPlayingAyah?.surah === surahNum;
+    ayahs.forEach((ayah) => {
+      // Estimate lines based on text length (rough approximation)
+      const estimatedLines = Math.ceil(ayah.text.split(/\s+/).length / 8);
 
-      // Handle Warsh QCF4 words
-      if (ayah.warshWords && ayah.warshWords.length > 0) {
-        ayah.warshWords.forEach((wordObj, wordIdx) => {
-          const isLastWord = wordIdx === ayah.warshWords.length - 1;
-          elements.push(
-            <span
-              key={`${ayah.number}-word-${wordIdx}`}
-              className={`clean-word warsh-qcf4-word${isPlaying ? " playing" : ""}`}
-              style={{ fontFamily: "QCF_HAFS" }}
-            >
-              {wordObj.code ? String.fromCodePoint(wordObj.code) : wordObj.text}
-              {!isLastWord && " "}
-            </span>
-          );
-        });
-      } else {
-        // Regular Hafs text - split by spaces
-        const words = ayah.text.split(/\s+/);
-        words.forEach((word, wordIdx) => {
-          const isLastWord = wordIdx === words.length - 1;
-          elements.push(
-            <span
-              key={`${ayah.number}-word-${wordIdx}`}
-              className={`clean-word${isPlaying ? " playing" : ""}`}
-            >
-              {word}
-              {!isLastWord && " "}
-            </span>
-          );
-        });
+      if (
+        lineCount + estimatedLines > targetLinesPerPage &&
+        currentPage.length > 0
+      ) {
+        pages.push([...currentPage]);
+        currentPage = [];
+        lineCount = 0;
       }
 
-      // Add verse marker after the ayah text
-      elements.push(
-        <VerseMarker
-          key={`marker-${ayah.number}`}
-          num={ayah.numberInSurah}
-          lang={lang}
-        />
-      );
-
-      // Add space between verses (except last one)
-      if (idx < ayahs.length - 1) {
-        elements.push(
-          <span key={`space-${ayah.number}`} className="clean-verse-space">
-            {" "}
-          </span>
-        );
-      }
+      currentPage.push(ayah);
+      lineCount += estimatedLines;
     });
 
-    return elements;
-  }, [ayahs, showBasmala, lang, currentPlayingAyah, surahNum]);
+    if (currentPage.length > 0) {
+      pages.push(currentPage);
+    }
+
+    return pages;
+  }, [ayahs]);
 
   return (
     <div className="clean-page-container">
-      <div
-        className={`clean-page-text${isQCF4 ? " qcf4-container" : ""}`}
-        style={{ fontSize: `${fontSize}px` }}
-        dir="rtl"
-      >
-        {renderContent}
-      </div>
+      {/* Basmala at the start if needed */}
+      {showBasmala && (
+        <div className="clean-basmala" style={{ fontSize: `${fontSize}px` }}>
+          {basmalaText}
+        </div>
+      )}
+
+      {/* Render pages with separators */}
+      {ayahsByPage.map((pageAyahs, pageIdx) => (
+        <div key={`page-${pageIdx}`}>
+          <div
+            className={`clean-page-text${isQCF4 ? " qcf4-container" : ""}`}
+            style={{ fontSize: `${fontSize}px` }}
+            dir="rtl"
+          >
+            {pageAyahs.map((ayah, ayahIdx) => {
+              const isPlaying =
+                currentPlayingAyah?.ayah === ayah.numberInSurah &&
+                currentPlayingAyah?.surah === surahNum;
+
+              return (
+                <span
+                  key={`ayah-${ayah.number}`}
+                  className={`clean-ayah${isPlaying ? " clean-ayah-playing" : ""}`}
+                >
+                  {/* Render the ayah text with tajweed coloring */}
+                  <SmartAyahRenderer
+                    ayah={ayah}
+                    showTajwid={showTajwid}
+                    isPlaying={isPlaying}
+                    surahNum={surahNum}
+                    calibration={calibration}
+                    riwaya={riwaya}
+                  />
+
+                  {/* Verse marker after the text */}
+                  <VerseMarker num={ayah.numberInSurah} lang={lang} />
+
+                  {/* Space after verse (except last one) */}
+                  {ayahIdx < pageAyahs.length - 1 && (
+                    <span className="clean-verse-space"> </span>
+                  )}
+                </span>
+              );
+            })}
+          </div>
+
+          {/* Page separator (except after last page) */}
+          {pageIdx < ayahsByPage.length - 1 && <PageSeparator />}
+        </div>
+      ))}
     </div>
   );
 }
