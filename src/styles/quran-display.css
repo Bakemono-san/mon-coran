@@ -3635,3 +3635,121 @@
         margin-inline: auto;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Clean Page View - Quran.com Style
+   ═══════════════════════════════════════════════════════════════ */
+
+.clean-page-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.clean-page-text {
+    font-family: var(--font-quran);
+    font-size: 32px;
+    line-height: 3;
+    text-align: center;
+    direction: rtl;
+    color: var(--text-quran);
+    word-spacing: 0.2em;
+    letter-spacing: 0.02em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.clean-basmala {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    color: var(--text-quran);
+}
+
+.clean-word {
+    display: inline;
+    font-family: inherit;
+    transition: color 0.2s ease;
+}
+
+.clean-word.playing {
+    color: var(--gold, #d4a820);
+    text-shadow: 0 0 8px rgba(212, 168, 32, 0.3);
+}
+
+.clean-verse-space {
+    display: inline;
+    white-space: pre;
+}
+
+/* Verse marker badge */
+.clean-verse-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 0.25em;
+    vertical-align: middle;
+    font-size: 0.5em;
+    color: var(--primary);
+    transform: translateY(-0.05em);
+    user-select: none;
+}
+
+.clean-verse-marker-svg {
+    display: block;
+    position: relative;
+}
+
+.clean-verse-num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9em;
+    font-weight: 500;
+    font-family: var(--font-ui);
+    direction: ltr;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .clean-verse-marker,
+[data-theme="night-blue"] .clean-verse-marker {
+    color: rgba(80, 200, 140, 0.8);
+}
+
+[data-theme="dark"] .clean-word.playing,
+[data-theme="night-blue"] .clean-word.playing {
+    color: rgba(212, 168, 32, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .clean-page-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .clean-page-text {
+        font-size: 28px;
+        line-height: 2.8;
+    }
+}
+
+@media (max-width: 480px) {
+    .clean-page-container {
+        padding: 1rem 0.75rem;
+    }
+
+    .clean-page-text {
+        font-size: 24px;
+        line-height: 2.6;
+    }
+
+    .clean-basmala {
+        font-size: 1.1em;
+        margin-bottom: 1rem;
+    }
+}

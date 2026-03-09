@@ -50,6 +50,7 @@ import TajweedLegend from "./Quran/TajweedLegend";
 import SmartAyahRenderer from "./Quran/SmartAyahRenderer";
 import AyahBlock from "./Quran/AyahBlock";
 import MushafInlineView from "./Quran/MushafInlineView";
+import CleanPageView from "./Quran/CleanPageView";
 
 import "../styles/quran-display.css";
 
@@ -1188,21 +1189,16 @@ export default function QuranDisplay() {
             </button>
           </div>
 
-          {/* ── Mushaf page layout ── */}
+          {/* ── Mushaf page layout - Clean Page Style (Quran.com like) ── */}
           {mushafLayout === "mushaf" && (
-            <MushafInlineView
+            <CleanPageView
               ayahs={visibleAyahs}
-              translations={visibleTranslations}
-              surahNum={currentSurah}
-              isQCF4={isQCF4}
-              showTajwid={showTajwid}
-              showTranslation={showTranslation}
-              currentPlayingAyah={currentPlayingAyah}
-              calibration={karaokeCalibration}
-              riwaya={riwaya}
               lang={lang}
               fontSize={fontSize}
-              onAyahClick={toggleAyah}
+              isQCF4={isQCF4}
+              showTajwid={showTajwid}
+              currentPlayingAyah={currentPlayingAyah}
+              surahNum={currentSurah}
             />
           )}
 
@@ -1498,30 +1494,18 @@ export default function QuranDisplay() {
             </button>
           </div>
 
-          {/* Vue Mushaf */}
-          {mushafLayout === "mushaf" &&
-            surahGroups.map((group, gi) => {
-              const groupTrans = translationMap
-                ? group.ayahs.map((a) => getTranslationForAyah(a))
-                : [];
-              return (
-                <MushafInlineView
-                  key={gi}
-                  ayahs={group.ayahs}
-                  translations={groupTrans}
-                  surahNum={group.surah}
-                  isQCF4={isQCF4}
-                  showTajwid={showTajwid}
-                  showTranslation={showTranslation}
-                  currentPlayingAyah={currentPlayingAyah}
-                  calibration={karaokeCalibration}
-                  riwaya={riwaya}
-                  lang={lang}
-                  fontSize={fontSize}
-                  onAyahClick={toggleAyah}
-                />
-              );
-            })}
+          {/* Vue Mushaf - Clean Page Style (Quran.com like) */}
+          {mushafLayout === "mushaf" && (
+            <CleanPageView
+              ayahs={surahGroups.flatMap((g) => g.ayahs)}
+              lang={lang}
+              fontSize={fontSize}
+              isQCF4={isQCF4}
+              showTajwid={showTajwid}
+              currentPlayingAyah={currentPlayingAyah}
+              surahNum={surahGroups[0]?.surah}
+            />
+          )}
 
           {/* Vue liste — utilise AyahBlock (cohérent avec sourate/juz) */}
           {mushafLayout !== "mushaf" &&
@@ -1718,35 +1702,18 @@ export default function QuranDisplay() {
             </button>
           </div>
 
-          {/* Vue Mushaf */}
-          {mushafLayout === "mushaf" &&
-            surahGroups.map((group, gi) => {
-              const groupTrans = translationMap
-                ? group.ayahs.map((a) => getTranslationForAyah(a))
-                : [];
-              return (
-                <MushafInlineView
-                  key={gi}
-                  ayahs={group.ayahs}
-                  translations={groupTrans}
-                  surahNum={group.surah}
-                  isQCF4={isQCF4}
-                  showTajwid={showTajwid}
-                  showTranslation={showTranslation}
-                  currentPlayingAyah={currentPlayingAyah}
-                  calibration={karaokeCalibration}
-                  riwaya={riwaya}
-                  lang={lang}
-                  fontSize={fontSize}
-                  onAyahClick={(n) =>
-                    toggleAyah(
-                      group.ayahs.find((a) => a.numberInSurah === n)?.number ??
-                        n,
-                    )
-                  }
-                />
-              );
-            })}
+          {/* Vue Mushaf - Clean Page Style (Quran.com like) */}
+          {mushafLayout === "mushaf" && (
+            <CleanPageView
+              ayahs={surahGroups.flatMap((g) => g.ayahs)}
+              lang={lang}
+              fontSize={fontSize}
+              isQCF4={isQCF4}
+              showTajwid={showTajwid}
+              currentPlayingAyah={currentPlayingAyah}
+              surahNum={surahGroups[0]?.surah}
+            />
+          )}
 
           {/* Vue liste */}
           {mushafLayout !== "mushaf" && (
