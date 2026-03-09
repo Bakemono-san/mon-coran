@@ -47,7 +47,10 @@ const initialState = {
   currentAyah: stored.lastPosition?.ayah || 1,
   currentPage: stored.lastPosition?.page || 1,
   currentJuz: stored.lastPosition?.juz || 1,
-  fontSize: stored.fontSize || 28,
+  quranFontSize:
+    stored.quranFontSize || stored.fontSize
+      ? Math.max(stored.quranFontSize || stored.fontSize, 42)
+      : 42,
   fontFamily: stored.fontFamily || "scheherazade-new",
   showHome: stored.showHome ?? true,
   showDuas: stored.showDuas ?? false,
@@ -158,8 +161,9 @@ function appReducer(state, action) {
     case "SET_RECITER":
       return { ...state, reciter: action.payload };
 
+    case "SET_QURAN_FONT_SIZE":
     case "SET_FONT_SIZE":
-      return { ...state, fontSize: action.payload };
+      return { ...state, quranFontSize: action.payload };
 
     case "SET_FONT_FAMILY":
       return { ...state, fontFamily: action.payload };
@@ -208,7 +212,8 @@ export function AppProvider({ children }) {
         theme: state.theme,
         riwaya: state.riwaya,
         reciter: state.reciter,
-        fontSize: state.fontSize,
+        quranFontSize: state.quranFontSize,
+        fontSize: state.quranFontSize,
         fontFamily: state.fontFamily,
         translationLang: state.translationLang,
         wordTranslationLang: state.wordTranslationLang,
@@ -250,7 +255,7 @@ export function AppProvider({ children }) {
     state.theme,
     state.riwaya,
     state.reciter,
-    state.fontSize,
+    state.quranFontSize,
     state.fontFamily,
     state.translationLang,
     state.wordTranslationLang,

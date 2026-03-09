@@ -338,6 +338,27 @@ export default function HomePage() {
             : "Direct section navigation",
       };
 
+  const heroStats = [
+    {
+      label: lang === "ar" ? "الموضع الحالي" : lang === "fr" ? "Position" : "Position",
+      value:
+        displayMode === "juz"
+          ? `${lang === "ar" ? "جزء" : "Juz"} ${lang === "ar" ? toAr(currentJuz) : currentJuz}`
+          : `${lang === "ar" ? "آية" : lang === "fr" ? "Ayah" : "Ayah"} ${lang === "ar" ? toAr(currentAyah || 1) : currentAyah || 1}`,
+      icon: "fa-location-crosshairs",
+    },
+    {
+      label: lang === "ar" ? "المفضلة" : lang === "fr" ? "Favoris" : "Saved",
+      value: lang === "ar" ? toAr(bookmarks.length) : bookmarks.length,
+      icon: "fa-bookmark",
+    },
+    {
+      label: lang === "ar" ? "الوضع" : lang === "fr" ? "Affichage" : "View",
+      value: currentModeLabel,
+      icon: "fa-layer-group",
+    },
+  ];
+
   return (
     <div className="hp-page">
 
@@ -346,6 +367,11 @@ export default function HomePage() {
         <div className="qc-hero-inner">
           <div className="qc-hero-grid">
             <div className="qc-hero-copy">
+              <span className="qc-hero-kicker">
+                <i className="fas fa-stars" aria-hidden="true" />
+                <span>{lang === "ar" ? "مساحة قراءة متقنة" : lang === "fr" ? "Une lecture plus noble" : "A more refined reading space"}</span>
+              </span>
+
               <PlatformLogo className="qc-logo-container" imgClassName="qc-logo-image" decorative />
 
               <h1 className="qc-site-name">MushafPlus</h1>
@@ -356,6 +382,14 @@ export default function HomePage() {
                   : lang === "fr"
                     ? "Lisez, méditez et mémorisez dans un espace plus apaisé"
                     : "Read, reflect and memorize in a calmer space"}
+              </p>
+
+              <p className="qc-hero-note">
+                {lang === "ar"
+                  ? "واجهة قراءة أوضح، انتقال أسرع بين السور والأجزاء، وتجربة أقرب إلى المصحف مع الحفاظ على الراحة البصرية."
+                  : lang === "fr"
+                    ? "Une lecture plus nette, une navigation plus fluide entre sourates et juz, et une expérience plus proche du mushaf."
+                    : "A cleaner reading flow, faster navigation across surahs and juz, and a calmer mushaf-first experience."}
               </p>
 
               <div className="qc-hero-meta">
@@ -396,6 +430,20 @@ export default function HomePage() {
                   <span>{lang === "ar" ? "الأدعية" : lang === "fr" ? "Ouvrir les douas" : "Open duas"}</span>
                 </button>
               </div>
+
+              <div className="qc-hero-stats">
+                {heroStats.map((item) => (
+                  <div key={item.label} className="qc-hero-stat">
+                    <span className="qc-hero-stat__icon">
+                      <i className={`fas ${item.icon}`} aria-hidden="true" />
+                    </span>
+                    <span className="qc-hero-stat__body">
+                      <span className="qc-hero-stat__label">{item.label}</span>
+                      <strong className="qc-hero-stat__value">{item.value}</strong>
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="qc-vdj">
@@ -410,6 +458,10 @@ export default function HomePage() {
                     { weekday: "short", day: "numeric", month: "short" }
                   )}
                 </span>
+              </div>
+              <div className="qc-vdj-orb" aria-hidden="true">
+                <span className="qc-vdj-orb__core"></span>
+                <span className="qc-vdj-orb__ring"></span>
               </div>
               <span className="qc-vdj-text">{dailyVerse.text}</span>
               {dailyVerse.trans_fr && lang === "fr" && (

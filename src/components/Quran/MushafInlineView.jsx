@@ -12,8 +12,8 @@ function AyahMarker({ num, lang }) {
       <svg
         className="mp-ayah-marker-svg"
         viewBox="0 0 36 36"
-        width="1.15em"
-        height="1.15em"
+        width="1.4em"
+        height="1.4em"
         aria-hidden="true"
       >
         {/* Outer ring */}
@@ -98,13 +98,17 @@ export default function MushafInlineView({
     lang === "ar"
       ? `${revelBadge} · ${toAr(ayahCountLabel)} آية`
       : `${revelBadge} · ${ayahCountLabel} ${lang === "fr" ? "versets" : "ayahs"}`;
+  const heroBadge =
+    riwaya === "warsh"
+      ? (lang === "ar" ? "ورش" : "Warsh")
+      : (lang === "ar" ? "حفص" : "Hafs");
   const basmalaTranslation =
     lang === "fr"
       ? "Au nom d'Allah, le Tout Misericordieux, le Tres Misericordieux"
       : lang === "ar"
         ? null
         : "In the Name of Allah, the Most Compassionate, the Most Merciful";
-  const mushafFontSize = Math.max((fontSize ?? 28) + 8, 38);
+  const mushafFontSize = Math.min(Math.max((fontSize ?? 38) + 16, 54), 72);
   const hasTranslationPanel = showTranslation && translations?.length > 0;
 
   return (
@@ -174,7 +178,7 @@ export default function MushafInlineView({
                 <span className="mp-hero-title">
                   {lang === "ar" ? `${toAr(surahNum)}. ${surahNameAr}` : `${surahNum}. ${surahNameLatin}`}
                 </span>
-                <span className="mp-hero-badge">info</span>
+                <span className="mp-hero-badge">{heroBadge}</span>
               </div>
               <span className="mp-hero-subtitle">{heroSubtitle}</span>
             </div>
@@ -191,43 +195,51 @@ export default function MushafInlineView({
             </div>
           )}
 
-          <div
-            className={`mp-body${isQCF4 ? " mp-body-qcf4" : ""}`}
-            style={{ "--mp-fs": `${mushafFontSize}px` }}
-            dir="rtl"
-            lang="ar"
-          >
-            {ayahs.map((ayah) => {
-              const isPlaying =
-                currentPlayingAyah?.ayah === ayah.numberInSurah &&
-                (currentPlayingAyah?.surah === surahNum || currentPlayingAyah?.surah == null);
-              const ayahKey = ayah.number ?? ayah.numberInSurah;
+          <div className="mp-stage">
+            <div className="mp-stage__glow" aria-hidden="true"></div>
+            <div
+              className={`mp-body${isQCF4 ? " mp-body-qcf4" : ""}`}
+              style={{ "--mp-fs": `${mushafFontSize}px` }}
+              dir="rtl"
+              lang="ar"
+            >
+              {ayahs.map((ayah) => {
+                const isPlaying =
+                  currentPlayingAyah?.ayah === ayah.numberInSurah &&
+                  (currentPlayingAyah?.surah === surahNum || currentPlayingAyah?.surah == null);
+                const ayahKey = ayah.number ?? ayah.numberInSurah;
 
-              return (
-                <React.Fragment key={ayahKey}>
-                  <span
-                    id={`ayah-${ayah.numberInSurah}`}
-                    className={`mp-ayah${isPlaying ? " mp-ayah--playing" : ""}`}
-                    onClick={() => onAyahClick?.(ayahKey)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === "Enter" && onAyahClick?.(ayahKey)}
-                    aria-label={`Verset ${ayah.numberInSurah}`}
-                  >
-                    <SmartAyahRenderer
-                      ayah={ayah}
-                      showTajwid={showTajwid}
-                      isPlaying={isPlaying}
-                      surahNum={surahNum}
-                      calibration={calibration}
-                      riwaya={riwaya}
-                    />
-                  </span>
-                  <AyahMarker num={ayah.numberInSurah} lang={lang} />
-                  {"\u200C"}
-                </React.Fragment>
-              );
-            })}
+                return (
+                  <React.Fragment key={ayahKey}>
+                    <span
+                      id={`ayah-${ayah.numberInSurah}`}
+                      className={`mp-ayah${isPlaying ? " mp-ayah--playing" : ""}`}
+                      onClick={() => onAyahClick?.(ayahKey)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === "Enter" && onAyahClick?.(ayahKey)}
+                      aria-label={`Verset ${ayah.numberInSurah}`}
+                    >
+                      <SmartAyahRenderer
+                        ayah={ayah}
+                        showTajwid={showTajwid}
+                        isPlaying={isPlaying}
+                        surahNum={surahNum}
+                        calibration={calibration}
+                        riwaya={riwaya}
+                      />
+                    </span>
+                    <AyahMarker num={ayah.numberInSurah} lang={lang} />
+                    {"\u200C"}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+            {pageStart && (
+              <div className="mp-folio" aria-label={lang === "ar" ? "رقم الصفحة" : lang === "fr" ? "Numero de page" : "Page number"}>
+                {lang === "ar" ? toAr(pageStart) : pageStart}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -235,13 +247,20 @@ export default function MushafInlineView({
       {showTranslation && translations?.length > 0 && (
         <div className="mp-translations">
           <div className="mp-translations-head">
-            {lang === "ar" ? "الترجمة" : lang === "fr" ? "Traduction" : "Translation"}
+            <span className="mp-translations-head__title">
+              {lang === "ar" ? "الترجمة" : lang === "fr" ? "Traduction" : "Translation"}
+            </span>
+            <span className="mp-translations-head__meta">
+              {lang === "ar"
+                ? `${toAr(ayahs[0]?.numberInSurah || 1)}-${toAr(ayahs[ayahs.length - 1]?.numberInSurah || 1)}`
+                : `${ayahs[0]?.numberInSurah || 1}-${ayahs[ayahs.length - 1]?.numberInSurah || 1}`}
+            </span>
           </div>
           {translations.map((tr, idx) =>
             tr ? (
               <div key={tr.number ?? idx} className="mp-trans-row">
                 <span className="mp-trans-num">
-                  {lang === "ar" ? toAr(idx + 1) : idx + 1}.
+                  {lang === "ar" ? toAr(ayahs[idx]?.numberInSurah || idx + 1) : ayahs[idx]?.numberInSurah || idx + 1}.
                 </span>
                 <span className="mp-trans-text">{tr.text}</span>
               </div>

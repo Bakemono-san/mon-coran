@@ -219,6 +219,14 @@
   margin-bottom: 0.65rem;
 }
 
+.settings-card-hint {
+  margin: -0.25rem 0 0.7rem;
+  color: var(--text-secondary);
+  font-family: var(--font-home-ui, var(--font-ui));
+  font-size: 0.74rem;
+  line-height: 1.55;
+}
+
 .settings-card-label .fas {
   color: var(--icon-muted, var(--primary));
   font-size: 0.85rem;

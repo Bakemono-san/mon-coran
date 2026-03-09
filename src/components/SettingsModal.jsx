@@ -42,7 +42,7 @@ const WORD_TRANSLATION_LANGUAGE_OPTIONS = [
 export default function SettingsModal() {
   const { state, dispatch, set } = useApp();
   const {
-    lang, theme, riwaya, reciter, fontSize, showTranslation, showTajwid,
+    lang, theme, riwaya, reciter, quranFontSize, showTranslation, showTajwid,
     showWordByWord, showTransliteration, showWordTranslation,
     translationLang, wordTranslationLang, displayMode, fontFamily, warshStrictMode,
     syncOffsetsMs, autoNightMode, nightStart, nightEnd, nightTheme, dayTheme
@@ -710,24 +710,31 @@ export default function SettingsModal() {
                   <div className="settings-card-label">
                     <i className="fas fa-text-height" aria-hidden="true"></i>
                     {t('settings.fontSize', lang)}
-                    <span className="settings-value-pill">{fontSize}px</span>
+                    <span className="settings-value-pill">{quranFontSize}px</span>
+                  </div>
+                  <div className="settings-card-hint">
+                    {lang === 'fr'
+                      ? 'Ajuste uniquement la taille du texte coranique arabe.'
+                      : lang === 'ar'
+                        ? 'هذا الخيار يغيّر حجم النص القرآني العربي فقط.'
+                        : 'This control changes only the Quranic Arabic text size.'}
                   </div>
                   <div className="font-size-stepper">
                     <button
                       className="fss-btn"
-                      onClick={() => dispatch({ type: 'SET_FONT_SIZE', payload: Math.max(18, fontSize - 2) })}
-                      disabled={fontSize <= 18}
+                      onClick={() => dispatch({ type: 'SET_QURAN_FONT_SIZE', payload: Math.max(42, quranFontSize - 2) })}
+                      disabled={quranFontSize <= 42}
                       aria-label={lang === 'fr' ? 'Réduire la taille' : lang === 'ar' ? 'تصغير الخط' : 'Decrease size'}
                     >
                       <span style={{ fontSize: '0.72rem', fontWeight: 800, fontFamily: 'var(--font-ui)', lineHeight: 1 }}>A</span>
                     </button>
                     <div className="fss-track" role="presentation">
-                      <div className="fss-bar" style={{ width: `${((fontSize - 18) / (48 - 18)) * 100}%` }} />
+                       <div className="fss-bar" style={{ width: `${((quranFontSize - 42) / (64 - 42)) * 100}%` }} />
                     </div>
                     <button
                       className="fss-btn"
-                      onClick={() => dispatch({ type: 'SET_FONT_SIZE', payload: Math.min(48, fontSize + 2) })}
-                      disabled={fontSize >= 48}
+                      onClick={() => dispatch({ type: 'SET_QURAN_FONT_SIZE', payload: Math.min(64, quranFontSize + 2) })}
+                      disabled={quranFontSize >= 64}
                       aria-label={lang === 'fr' ? 'Augmenter la taille' : lang === 'ar' ? 'تكبير الخط' : 'Increase size'}
                     >
                       <span style={{ fontSize: '1.15rem', fontWeight: 800, fontFamily: 'var(--font-ui)', lineHeight: 1 }}>A</span>
@@ -737,7 +744,7 @@ export default function SettingsModal() {
                     className="font-size-preview-ar"
                     style={{
                       fontFamily: 'var(--font-quran)',
-                      fontSize: `${Math.round(fontSize * 0.55)}px`,
+                      fontSize: `${Math.round(quranFontSize * 0.82)}px`,
                       direction: 'rtl',
                       textAlign: 'center',
                       marginTop: '0.5rem',
